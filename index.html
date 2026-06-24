@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>車輛試乘預約系統 - Weekly Premium Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'Microsoft JhengHei', sans-serif; }
+
+        /* 車型基礎背景 (未填寫) */
+        .car-yellow { background-color: #fffdf0; }
+        .car-blue { background-color: #f0f7ff; }
+        .car-grey { background-color: #f8fafc; }
+        
+        /* 已填寫狀態 (加深) */
+        .filled { transition: all 0.2s ease; }
+        .car-yellow.filled { background-color: #fef08a; }
+        .car-blue.filled { background-color: #bfdbfe; }
+        .car-grey.filled { background-color: #e2e8f0; }
+
+        .filled input { font-weight: 700; color: #000; }
+        .filled select { font-weight: 700; color: #000; }
+
+        /* 總覽卡片徽章 */
+        .badge-car {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        .badge-car:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .badge-yellow { background-color: #fffbeb; color: #b45309; border-color: #fef3c7; }
+        .badge-yellow.active { background-color: #fef08a; color: #78350f; border-color: #f59e0b; font-weight: bold; }
+        
+        .badge-blue { background-color: #eff6ff; color: #1d4ed8; border-color: #dbeafe; }
+        .badge-blue.active { background-color: #bfdbfe; color: #1e3a8a; border-color: #3b82f6; font-weight: bold; }
+        
+        .badge-grey { background-color: #f8fafc; color: #475569; border-color: #f1f5f9; }
+        .badge-grey.active { background-color: #e2e8f0; color: #0f172a; border-color: #94a3b8; font-weight: bold; }
+
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            background-color: #ffffff;
+            z-index: 20;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        }
+
+        input, select {
+            width: 100%;
+            background: transparent;
+            padding: 4px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+
+        select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .weekend-header {
+            color: #ef4444;
+        }
+
+        /* 隱藏捲軸 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+
+    <!-- 載入中遮罩 -->
+    <div id="loading" class="fixed inset-0 bg-white z-[100] flex flex-col items-center justify-center">
+        <div class="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
+        <p class="text-xs font-bold text-slate-400 tracking-widest uppercase animate-pulse">加載中...</p>
+    </div>
+
+    <div id="app" class="max-w-[1600px] mx-auto p-4 md:p-6 opacity-0 transition-opacity duration-500">
+        
+        <!-- 頂部控制面板 -->
+        <header class="flex flex-col lg:flex-row items-center justify-between gap-4 mb-4">
+            <div class="flex items-center gap-3">
+                <div class="w-2.5 h-10 bg-blue-600 rounded-full"></div>
+                <div>
+                    <h1 class="text-2xl font-black tracking-tight">車輛試乘預約系統</h1>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <span id="syncStatus" class="text-[10px] font-bold uppercase text-slate-400 tracking-tighter">Connecting...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 週別切換與功能導航 -->
+            <div class="flex flex-wrap items-center gap-3 bg-white p-2.5 rounded-2xl shadow-sm border border-slate-200">
+                <button onclick="changeWeek(-7)" class="hover:bg-slate-100 p-1.5 rounded-lg transition-colors text-slate-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                
+                <span id="weekRangeDisplay" class="font-extrabold text-slate-700 px-2 text-sm md:text-base">----年--月--日 ~ --月--日</span>
+                
+                <button onclick="changeWeek(7)" class="hover:bg-slate-100 p-1.5 rounded-lg transition-colors text-slate-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+
+                <button id="todayBtn" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-xl transition-all font-bold text-xs">
+                    返回本週
+                </button>
+
+                <button onclick="openBatchModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-xl transition-all font-bold text-xs shadow-md shadow-indigo-100 flex items-center gap-1">
+                    ⚡ 批次快速預約
+                </button>
+            </div>
+        </header>
+
+        <!-- ⚠️ 置頂公告與提醒欄 -->
+        <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-amber-100 rounded-lg text-amber-600 flex-shrink-0">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-black text-amber-800 text-sm md:text-base">PHEV 及 HS 2.0 試乘預約提醒</p>
+                    <p class="text-amber-700 text-xs md:text-sm mt-0.5">因 PHEV 試乘車已繳回，若需預約 <span class="font-extrabold text-amber-900">PHEV</span> 或 <span class="font-extrabold text-amber-900">HS 2.0</span>，請直接洽中壢所值班櫃檯。</p>
+                </div>
+            </div>
+            <a href="tel:03-4345550" class="flex-shrink-0 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-lg transition-colors flex items-center gap-1 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
+                撥打 03-4345550
+            </a>
+        </div>
+
+        <!-- 視圖切換標籤頁 (Tabs) -->
+        <div class="flex border-b border-slate-200 mb-6 overflow-x-auto gap-1">
+            <button onclick="switchTab('all')" id="tab-all" class="px-5 py-3 font-extrabold text-sm border-b-2 border-blue-600 text-blue-600 whitespace-nowrap transition-all">🚗 綜合週看板 (總覽)</button>
+            <button onclick="switchTab('car1')" id="tab-car1" class="px-5 py-3 font-bold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-600 whitespace-nowrap transition-all">💛 1.5T 灰色 BUW9573</button>
+            <button onclick="switchTab('car2')" id="tab-car2" class="px-5 py-3 font-bold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-600 whitespace-nowrap transition-all">💙 ZS 藍色 BUW3786</button>
+            <button onclick="switchTab('car4')" id="tab-car4" class="px-5 py-3 font-bold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-600 whitespace-nowrap transition-all">灰 G50+ BXV6506</button>
+        </div>
+
+        <!-- 預約表格容器 -->
+        <div class="bg-white rounded-[1.5rem] shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm min-w-[1200px] table-fixed" id="mainTable">
+                    <thead id="tableHead">
+                        <!-- 由 JS 動態生成 -->
+                    </thead>
+                    <tbody id="appointmentBody">
+                        <!-- 由 JS 動態生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 頁尾資訊 -->
+        <footer class="mt-6 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest px-2 gap-4">
+            <div class="flex flex-wrap items-center gap-3 justify-center">
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-cyan-400"></span> 優先/熱門時段</div>
+                <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-amber-200 border border-amber-400"></span> 已預約狀態</div>
+                <div id="userIdDisplay">User: ...</div>
+            </div>
+            <div>Multi-User Real-time Sync (Weekly View)</div>
+        </footer>
+    </div>
+
+    <!-- 快速預約/編輯彈窗 (Modal) -->
+    <div id="bookingModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-100 p-6 transform scale-95 transition-transform duration-300" id="modalCard">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-black text-slate-800" id="modalTitle">預約試乘登記</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="p-3 bg-slate-50 rounded-xl space-y-1">
+                    <div class="text-xs font-bold text-slate-400 uppercase">預約車款</div>
+                    <div class="text-sm font-black text-slate-700" id="modalCarName">---</div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 bg-slate-50 rounded-xl space-y-1">
+                        <div class="text-xs font-bold text-slate-400 uppercase">日期</div>
+                        <div class="text-sm font-black text-slate-700" id="modalDate">---</div>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl space-y-1">
+                        <div class="text-xs font-bold text-slate-400 uppercase">時段</div>
+                        <div class="text-sm font-black text-slate-700" id="modalTime">---</div>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase">客戶姓名</label>
+                    <input type="text" id="modalCustomerInput" placeholder="請輸入客戶名" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-100 text-left text-sm focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all">
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase">銷售顧問</label>
+                    <div class="relative">
+                        <select id="modalConsultantSelect" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-100 text-left text-sm focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all">
+                            <!-- JS 動態生成 -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button onclick="clearBookingFromModal()" class="w-1/3 border border-red-200 text-red-500 hover:bg-red-50 py-3 rounded-xl font-bold text-sm transition-all">
+                    清除預約
+                </button>
+                <button onclick="saveBookingFromModal()" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-100">
+                    儲存預約
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ⚡ 批次快速預約彈窗 (Batch Booking Modal) -->
+    <div id="batchModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-100 p-6 transform scale-95 transition-transform duration-300" id="batchCard">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">⚡</span>
+                    <h3 class="text-lg font-black text-slate-800">快速批次預約</h3>
+                </div>
+                <button onclick="closeBatchModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- 選擇車款 -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase">選擇預約車款</label>
+                    <select id="batchCarSelect" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-100 text-left text-sm focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all">
+                        <!-- JS 動態生成車款 -->
+                    </select>
+                </div>
+
+                <!-- 日期範圍 -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase">日期範圍</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <span class="text-[10px] text-slate-400 block mb-1">開始日期</span>
+                            <input type="date" id="batchStartDate" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-sm focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all">
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block mb-1">結束日期</span>
+                            <input type="date" id="batchEndDate" class="w-full bg-slate-50 p-2.5 rounded-xl border border-slate-100 text-sm focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 時段類型 (整天 / 上半天 / 下半天) -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 uppercase block mb-1">預約時段類型</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="cursor-pointer border rounded-xl p-3 flex flex-col items-center justify-center gap-1 hover:bg-slate-50 transition-all border-slate-200" id="label-period-whole">
+                            <input type="radio" name="batchPeriod" value="whole" checked class="sr-only" onchange="updatePeriodSelectionStyles()">
+                            <span class="text-xs font-black text-slate-700">整天</span>
+                            <span class="text-[9px] text-slate-400">09:00 - 20:00</span>
+                        </label>
+                        <label class="cursor-pointer border rounded-xl p-3 flex flex-col items-center justify-center gap-1 hover:bg-slate-50 transition-all border-slate-200" id="label-period-morning">
+                            <input type="radio" name="batchPeriod" value="morning" class="sr-only" onchange="updatePeriodSelectionStyles()">
+                            <span class="text-xs font-black text-slate-700">上午半天</span>
+                            <span class="text-[9px] text-slate-400">09:00 - 14:00</span>
+                        </label>
+                        <label class="cursor-pointer border rounded-xl p-3 flex flex-col items-center justify-center gap-1 hover:bg-slate-50 transition-all border-slate-200" id="label-period-afternoon">
+                            <input type="radio" name="batchPeriod" value="afternoon" class="sr-only" onchange="updatePeriodSelectionStyles()">
+                            <span class="text-xs font-black text-slate-700">下午半天</span>
+                            <span class="text-[9px] text-slate-400">15:00 - 20:00</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 客戶與顧問 -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-500 uppercase">客戶姓名</label>
+                        <input type="text" id="batchCustomerInput" placeholder="請輸入客戶名" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-100 text-left text-sm focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all">
+                    </div>
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-bold text-slate-500 uppercase">銷售顧問</label>
+                        <select id="batchConsultantSelect" class="w-full bg-slate-50 p-3 rounded-xl border border-slate-100 text-left text-sm focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all">
+                            <!-- JS 動態生成 -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+                <button onclick="closeBatchModal()" class="w-1/3 border border-slate-200 hover:bg-slate-50 py-3 rounded-xl font-bold text-sm transition-all text-slate-600">
+                    取消
+                </button>
+                <button onclick="saveBatchBooking()" class="w-2/3 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-100">
+                    確認批次預約
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自定義確認清除 Dialog -->
+    <div id="confirmModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[60] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white max-w-sm w-full p-6 rounded-2xl shadow-xl transform scale-95 transition-transform duration-300" id="confirmCard">
+            <h3 class="text-base font-black text-slate-800 mb-2">確定清除預約？</h3>
+            <p class="text-xs text-slate-500 mb-5">清除後資料將同步自雲端移除且無法復原。</p>
+            <div class="flex gap-3">
+                <button onclick="closeConfirmModal(false)" class="w-1/2 border py-2 rounded-xl font-bold text-xs text-slate-600 hover:bg-slate-50">取消</button>
+                <button onclick="closeConfirmModal(true)" class="w-1/2 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl font-bold text-xs">確認清除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 同步與提示 Toast (升級支援各類型文字通知) -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-5 py-2.5 rounded-xl shadow-2xl opacity-0 transition-all duration-300 pointer-events-none z-50 flex items-center gap-3">
+        <div id="toastSpinner" class="w-3 h-3 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+        <span id="toastText" class="text-xs font-bold">同步中</span>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'car-reservation-refined-v3';
+
+        // 時段設定 (共 12 小時單位)
+        const times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+        
+        // 車款基本資料 (已移除 PHEV)
+        const cars = {
+            car1: { name: "1.5T 灰色 BUW9573", bg: "car-yellow", badge: "badge-yellow" },
+            car2: { name: "ZS 藍色 BUW3786", bg: "car-blue", badge: "badge-blue" },
+            car4: { name: "G50+ 灰色 BXV6506", bg: "car-grey", badge: "badge-grey" }
+        };
+
+        const consultants = ["-- 選擇 --", "王耀慶", "李敬平", "高永霖", "傅堃棋", "劉臻", "蕭凱升"];
+
+        let currentUser = null;
+        let allReservations = {}; 
+        let unsubscribe = null;
+        let activeTab = "all"; 
+
+        // 週別計算基準日 (週一)
+        let currentWeekMonday = null;
+
+        const tableHead = document.getElementById('tableHead');
+        const appointmentBody = document.getElementById('appointmentBody');
+        const weekRangeDisplay = document.getElementById('weekRangeDisplay');
+        const syncStatus = document.getElementById('syncStatus');
+        const loading = document.getElementById('loading');
+        const appContainer = document.getElementById('app');
+        const userIdDisplay = document.getElementById('userIdDisplay');
+
+        // Modal 操作暫存
+        let modalState = { date: '', time: '', carId: '' };
+        let confirmPromiseResolver = null;
+
+        function getMonday(d) {
+            d = new Date(d);
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(d.setDate(diff));
+        }
+
+        function formatDate(d) {
+            const year = d.getFullYear();
+            const month = (d.getMonth() + 1).toString().padStart(2, '0');
+            const date = d.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${date}`;
+        }
+
+        function getWeekDates() {
+            const dates = [];
+            for (let i = 0; i < 7; i++) {
+                const nextDay = new Date(currentWeekMonday);
+                nextDay.setDate(currentWeekMonday.getDate() + i);
+                dates.push(formatDate(nextDay));
+            }
+            return dates;
+        }
+
+        window.changeWeek = (daysOffset) => {
+            currentWeekMonday.setDate(currentWeekMonday.getDate() + daysOffset);
+            updateWeekHeader();
+            renderTable();
+        };
+
+        window.goToToday = () => {
+            currentWeekMonday = getMonday(new Date());
+            updateWeekHeader();
+            renderTable();
+        };
+
+        function updateWeekHeader() {
+            const weekDates = getWeekDates();
+            const startStr = weekDates[0].replace(/-/g, '/');
+            const endParts = weekDates[6].split('-');
+            const endStr = `${endParts[1]}/${endParts[2]}`;
+            weekRangeDisplay.innerText = `${startStr} ~ ${endStr}`;
+        }
+
+        window.switchTab = (tabId) => {
+            activeTab = tabId;
+            
+            ['all', 'car1', 'car2', 'car4'].forEach(id => {
+                const tabBtn = document.getElementById(`tab-${id}`);
+                if (tabBtn) {
+                    if (id === tabId) {
+                        tabBtn.className = "px-5 py-3 font-extrabold text-sm border-b-2 border-blue-600 text-blue-600 whitespace-nowrap transition-all";
+                    } else {
+                        tabBtn.className = "px-5 py-3 font-bold text-sm border-b-2 border-transparent text-slate-400 hover:text-slate-600 whitespace-nowrap transition-all";
+                    }
+                }
+            });
+
+            renderTable();
+        };
+
+        async function startSync() {
+            if (!currentUser) return;
+            if (unsubscribe) unsubscribe();
+
+            const collRef = collection(db, 'artifacts', appId, 'public', 'data', 'reservations');
+
+            unsubscribe = onSnapshot(collRef, (snapshot) => {
+                allReservations = {};
+                snapshot.forEach(doc => {
+                    allReservations[doc.id] = doc.data();
+                });
+                renderTable();
+                syncStatus.innerText = "● 線上同步中";
+                syncStatus.className = "text-[10px] font-bold uppercase text-green-500 tracking-tighter";
+            }, (error) => {
+                console.error("同步失敗", error);
+                syncStatus.innerText = "● 連線異常";
+                syncStatus.className = "text-[10px] font-bold uppercase text-red-500 tracking-tighter";
+            });
+        }
+
+        function renderTable() {
+            const weekDates = getWeekDates();
+            const weekDays = ["一", "二", "三", "四", "五", "六", "日"];
+            
+            let headerHtml = '';
+            if (activeTab === "all") {
+                headerHtml = `
+                    <tr class="bg-slate-50">
+                        <th class="w-24 p-4 sticky-col bg-slate-50 font-black text-blue-600 text-lg border-b border-r text-center">時段</th>
+                        ${weekDates.map((date, i) => {
+                            const isWeekend = i === 5 || i === 6;
+                            const weekendClass = isWeekend ? 'weekend-header' : '';
+                            const displayDate = date.split('-')[1] + '.' + date.split('-')[2];
+                            return `<th class="p-4 border-b border-r font-black text-center ${weekendClass}">${displayDate} (週${weekDays[i]})</th>`;
+                        }).join('')}
+                    </tr>
+                `;
+            } else {
+                headerHtml = `
+                    <tr class="bg-slate-50">
+                        <th rowspan="2" class="w-24 p-4 sticky-col bg-slate-50 font-black text-blue-600 text-lg border-b border-r text-center">時段</th>
+                        ${weekDates.map((date, i) => {
+                            const isWeekend = i === 5 || i === 6;
+                            const weekendClass = isWeekend ? 'weekend-header' : '';
+                            const displayDate = date.split('-')[1] + '.' + date.split('-')[2];
+                            return `<th colspan="2" class="p-4 border-b border-r font-black text-center ${weekendClass}">${displayDate} (週${weekDays[i]})</th>`;
+                        }).join('')}
+                    </tr>
+                    <tr class="bg-white text-[9px] font-black text-slate-300 uppercase tracking-widest">
+                        ${weekDates.map(() => `<th class="p-1 border-b border-r">客戶名</th><th class="p-1 border-b border-r">銷售顧問</th>`).join('')}
+                    </tr>
+                `;
+            }
+            tableHead.innerHTML = headerHtml;
+
+            appointmentBody.innerHTML = '';
+            times.forEach(time => {
+                const row = document.createElement('tr');
+                const isMorning = time === "09:00";
+                const timeCellClass = isMorning ? 'bg-cyan-400 text-white' : 'bg-slate-50 text-slate-400';
+                
+                let rowHtml = `<td class="p-3 font-black sticky-col border-b border-r text-center text-base ${timeCellClass}">${time}</td>`;
+
+                if (activeTab === "all") {
+                    weekDates.forEach((date, i) => {
+                        const dayData = allReservations[date] || {};
+                        const timeData = dayData[time] || {};
+                        
+                        let cellContent = `<td class="border-b border-r p-2 bg-slate-50/20"><div class="space-y-1.5">`;
+                        
+                        Object.keys(cars).forEach(carId => {
+                            const data = timeData[carId] || { customer: '', consultant: '' };
+                            const hasBooking = data.customer.trim() !== '' || (data.consultant !== '' && data.consultant !== '-- 選擇 --');
+                            const activeClass = hasBooking ? 'active' : '';
+                            const textDisplay = hasBooking ? `${data.customer} (${data.consultant})` : `+ 空閒`;
+                            const carLabel = carId === 'car1' ? '1.5T' : carId === 'car2' ? 'ZS' : 'G50+';
+                            
+                            cellContent += `
+                                <div onclick="openEditModal('${date}', '${time}', '${carId}')" class="badge-car ${cars[carId].badge} ${activeClass}">
+                                    <span class="font-extrabold text-[9px] uppercase tracking-tighter opacity-80">${carLabel}</span>
+                                    <span class="truncate max-w-[100px] text-[11px]">${textDisplay}</span>
+                                </div>
+                            `;
+                        });
+                        
+                        cellContent += `</div></td>`;
+                        rowHtml += cellContent;
+                    });
+                } else {
+                    weekDates.forEach((date) => {
+                        const dayData = allReservations[date] || {};
+                        const timeData = dayData[time] || {};
+                        const data = timeData[activeTab] || { customer: '', consultant: '' };
+                        
+                        const isFilled = data.customer.trim() !== '' || (data.consultant !== '' && data.consultant !== '-- 選擇 --');
+                        const cellBg = getCarBg(activeTab);
+                        const filledClass = isFilled ? 'filled' : '';
+                        
+                        rowHtml += `
+                            <td class="border-b border-r p-1 ${cellBg} ${filledClass} transition-colors duration-200">
+                                <input type="text" value="${data.customer}" 
+                                       onchange="window.saveToCloud('${date}', '${time}', '${activeTab}', 'customer', this.value)"
+                                       placeholder="-">
+                            </td>
+                            <td class="border-b border-r p-1 ${cellBg} ${filledClass} transition-colors duration-200">
+                                <select onchange="window.saveToCloud('${date}', '${time}', '${activeTab}', 'consultant', this.value)">
+                                    ${consultants.map(c => `<option value="${c}" ${data.consultant === c ? 'selected' : ''}>${c}</option>`).join('')}
+                                </select>
+                            </td>
+                        `;
+                    });
+                }
+                
+                row.innerHTML = rowHtml;
+                appointmentBody.appendChild(row);
+            });
+        }
+
+        function getCarBg(carId) {
+            return cars[carId]?.bg || '';
+        }
+
+        window.saveToCloud = async (date, time, carId, field, value) => {
+            if (!currentUser) return;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'reservations', date);
+            triggerToast("同步中...", true);
+
+            const dayData = JSON.parse(JSON.stringify(allReservations[date] || {}));
+            if (!dayData[time]) dayData[time] = {};
+            if (!dayData[time][carId]) dayData[time][carId] = { customer: '', consultant: '' };
+            
+            dayData[time][carId][field] = value;
+
+            try {
+                await setDoc(docRef, dayData);
+                setTimeout(() => triggerToast("同步成功", false, 1000), 500);
+            } catch (err) {
+                console.error("同步失敗", err);
+                triggerToast("同步出錯", false, 2000);
+            }
+        };
+
+        // 快速預約 (單一) 視窗控制
+        window.openEditModal = (date, time, carId) => {
+            modalState = { date, time, carId };
+            
+            document.getElementById('modalCarName').innerText = cars[carId].name;
+            document.getElementById('modalDate').innerText = date;
+            document.getElementById('modalTime').innerText = time;
+            
+            const dayData = allReservations[date] || {};
+            const booking = dayData[time]?.[carId] || { customer: '', consultant: '' };
+            
+            document.getElementById('modalCustomerInput').value = booking.customer;
+            
+            const select = document.getElementById('modalConsultantSelect');
+            select.innerHTML = consultants.map(c => `<option value="${c}" ${booking.consultant === c ? 'selected' : ''}>${c}</option>`).join('');
+            
+            const modal = document.getElementById('bookingModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+        };
+
+        window.closeModal = () => {
+            const modal = document.getElementById('bookingModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.add('scale-95');
+        };
+
+        window.saveBookingFromModal = async () => {
+            const customer = document.getElementById('modalCustomerInput').value;
+            const consultant = document.getElementById('modalConsultantSelect').value;
+            
+            const { date, time, carId } = modalState;
+            
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'reservations', date);
+            triggerToast("同步中...", true);
+
+            const dayData = JSON.parse(JSON.stringify(allReservations[date] || {}));
+            if (!dayData[time]) dayData[time] = {};
+            dayData[time][carId] = { customer, consultant };
+
+            try {
+                await setDoc(docRef, dayData);
+                closeModal();
+                setTimeout(() => triggerToast("預約已更新", false, 1000), 500);
+            } catch (err) {
+                console.error("保存失敗", err);
+                triggerToast("保存失敗", false, 2000);
+            }
+        };
+
+        window.clearBookingFromModal = async () => {
+            const confirmClear = await showConfirmModal();
+            if (!confirmClear) return;
+
+            const { date, time, carId } = modalState;
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'reservations', date);
+            triggerToast("清除中...", true);
+
+            const dayData = JSON.parse(JSON.stringify(allReservations[date] || {}));
+            if (dayData[time] && dayData[time][carId]) {
+                delete dayData[time][carId];
+            }
+
+            try {
+                await setDoc(docRef, dayData);
+                closeModal();
+                setTimeout(() => triggerToast("預約已清除", false, 1000), 500);
+            } catch (err) {
+                console.error("清除失敗", err);
+                triggerToast("清除失敗", false, 2000);
+            }
+        };
+
+        // ⚡ 批次快速預約視窗控制
+        window.openBatchModal = () => {
+            const today = new Date();
+            const todayStr = formatDate(today);
+            
+            // 初始化選單
+            document.getElementById('batchStartDate').value = todayStr;
+            document.getElementById('batchEndDate').value = todayStr;
+            
+            const carSelect = document.getElementById('batchCarSelect');
+            carSelect.innerHTML = Object.keys(cars).map(carId => {
+                return `<option value="${carId}">${cars[carId].name}</option>`;
+            }).join('');
+
+            const consultantSelect = document.getElementById('batchConsultantSelect');
+            consultantSelect.innerHTML = consultants.map(c => {
+                return `<option value="${c}">${c}</option>`;
+            }).join('');
+
+            document.getElementById('batchCustomerInput').value = "";
+
+            const modal = document.getElementById('batchModal');
+            const card = document.getElementById('batchCard');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+
+            window.updatePeriodSelectionStyles();
+        };
+
+        window.closeBatchModal = () => {
+            const modal = document.getElementById('batchModal');
+            const card = document.getElementById('batchCard');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.add('scale-95');
+        };
+
+        window.updatePeriodSelectionStyles = () => {
+            const selected = document.querySelector('input[name="batchPeriod"]:checked').value;
+            ['whole', 'morning', 'afternoon'].forEach(val => {
+                const label = document.getElementById(`label-period-${val}`);
+                if (val === selected) {
+                    label.className = "cursor-pointer border-2 rounded-xl p-3 flex flex-col items-center justify-center gap-1 transition-all border-blue-600 bg-blue-50/30 ring-2 ring-blue-100";
+                } else {
+                    label.className = "cursor-pointer border rounded-xl p-3 flex flex-col items-center justify-center gap-1 hover:bg-slate-50 transition-all border-slate-200";
+                }
+            });
+        };
+
+        window.saveBatchBooking = async () => {
+            const carId = document.getElementById('batchCarSelect').value;
+            const startDateStr = document.getElementById('batchStartDate').value;
+            const endDateStr = document.getElementById('batchEndDate').value;
+            const periodType = document.querySelector('input[name="batchPeriod"]:checked').value;
+            const customer = document.getElementById('batchCustomerInput').value.trim();
+            const consultant = document.getElementById('batchConsultantSelect').value;
+
+            if (!startDateStr || !endDateStr) {
+                triggerToast("請選擇日期範圍！", false, 2000);
+                return;
+            }
+            if (!customer) {
+                triggerToast("請輸入客戶姓名！", false, 2000);
+                return;
+            }
+            if (consultant === "-- 選擇 --") {
+                triggerToast("請選擇銷售顧問！", false, 2000);
+                return;
+            }
+
+            let start = new Date(startDateStr);
+            let end = new Date(endDateStr);
+            start.setHours(0,0,0,0);
+            end.setHours(0,0,0,0);
+
+            if (start > end) {
+                triggerToast("開始日期不能晚於結束日期！", false, 2000);
+                return;
+            }
+
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            if (diffDays > 31) {
+                triggerToast("單次批次預約最多不可超過 31 天！", false, 2000);
+                return;
+            }
+
+            // 判斷時段
+            let activeHours = [];
+            if (periodType === 'whole') {
+                activeHours = [...times];
+            } else if (periodType === 'morning') {
+                activeHours = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00"];
+            } else if (periodType === 'afternoon') {
+                activeHours = ["15:00", "16:00", "17:00", "18:00", "19:00", "20:00"];
+            }
+
+            triggerToast("正在寫入批次預約...", true, 0);
+
+            let curr = new Date(start);
+            const savePromises = [];
+
+            while (curr <= end) {
+                const currentDateStr = formatDate(curr);
+                const dayData = JSON.parse(JSON.stringify(allReservations[currentDateStr] || {}));
+                
+                activeHours.forEach(hour => {
+                    if (!dayData[hour]) dayData[hour] = {};
+                    dayData[hour][carId] = { customer, consultant };
+                });
+
+                const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'reservations', currentDateStr);
+                savePromises.push(setDoc(docRef, dayData));
+                
+                curr.setDate(curr.getDate() + 1);
+            }
+
+            try {
+                await Promise.all(savePromises);
+                closeBatchModal();
+                triggerToast(`成功完成 ${diffDays} 天的批次預約！`, false, 2500);
+            } catch (err) {
+                console.error("批次保存失敗", err);
+                triggerToast("批次預約同步出錯，請重試", false, 2500);
+            }
+        };
+
+        // 自定義確認 Dialog 控制
+        function showConfirmModal() {
+            return new Promise((resolve) => {
+                confirmPromiseResolver = resolve;
+                const modal = document.getElementById('confirmModal');
+                const card = document.getElementById('confirmCard');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                card.classList.remove('scale-95');
+            });
+        }
+
+        window.closeConfirmModal = (confirmed) => {
+            const modal = document.getElementById('confirmModal');
+            const card = document.getElementById('confirmCard');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            card.classList.add('scale-95');
+            if (confirmPromiseResolver) confirmPromiseResolver(confirmed);
+        };
+
+        // 精緻 Toast 自定義提示
+        function triggerToast(message, isSpinning = false, duration = 2000) {
+            const toast = document.getElementById('toast');
+            const spinner = document.getElementById('toastSpinner');
+            const text = document.getElementById('toastText');
+            
+            text.innerText = message;
+            spinner.style.display = isSpinning ? 'block' : 'none';
+            toast.style.opacity = '1';
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                }, duration);
+            }
+        }
+
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) { 
+                console.error("Auth 錯誤", err); 
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                userIdDisplay.innerText = `ID: ${user.uid.substring(0, 5)}`;
+                
+                currentWeekMonday = getMonday(new Date());
+                updateWeekHeader();
+                
+                startSync();
+
+                loading.style.display = 'none';
+                appContainer.style.opacity = '1';
+            }
+        });
+
+        document.getElementById('todayBtn').onclick = window.goToToday;
+
+        initAuth();
+    </script>
+</body>
+</html>
