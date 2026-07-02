@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MG 桃園展示中心 7月銷售資訊系統</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        mg: {
+                            red: '#E31230',
+                            redDark: '#A00D22',
+                            gold: '#D4AF37',
+                            goldDark: '#B8860B',
+                            darkBg: '#09090B',
+                            darkCard: '#18181B',
+                            darkInput: '#27272A',
+                            lightBg: '#F4F4F5',
+                            lightCard: '#FFFFFF',
+                            lightInput: '#E4E4E7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['SF Pro TC', 'PingFang TC', 'Microsoft JhengHei', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        * {
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: #E4E4E7;
+            height: 6px;
+            border-radius: 3px;
+        }
+        .dark input[type="range"]::-webkit-slider-runnable-track {
+            background: #27272A;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -5px;
+            background-color: #E31230;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(227, 18, 48, 0.5);
+            transition: transform 0.1s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        
+        /* 翻牌動畫樣式 */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card-flipped {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding-bottom: 4rem;
+            }
+            header > div {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+                padding: 0.75rem;
+            }
+            header > div > div:first-child {
+                min-width: 0;
+                flex: 1 1 100%;
+            }
+            header > div > div:last-child {
+                width: 100%;
+                justify-content: space-between;
+                gap: 0.5rem;
+            }
+            header h1 {
+                flex-wrap: wrap;
+                gap: 0.35rem;
+                line-height: 1.25;
+            }
+            header nav {
+                gap: 0.75rem;
+                padding-left: 0.75rem;
+                padding-right: 0.75rem;
+            }
+            .nav-btn {
+                padding-top: 0.75rem !important;
+                padding-bottom: 0.75rem !important;
+                white-space: nowrap;
+            }
+            main {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+                padding-top: 1rem !important;
+            }
+            .section-panel,
+            #price-card-container {
+                overflow-wrap: break-word;
+                word-break: break-word;
+            }
+            button,
+            select,
+            input,
+            textarea {
+                min-width: 0;
+            }
+            .section-panel > .bg-white,
+            .section-panel > .dark\:bg-mg-darkCard {
+                border-radius: 1rem;
+            }
+            .section-panel > div > div[class*="px-6"],
+            #price-card-container > div > div:first-child {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+            .section-panel > div > div[class*="p-6"],
+            #price-card-container > div > div:nth-child(2) {
+                padding: 1rem !important;
+            }
+            #price-card-container > div > div:first-child {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.6rem;
+            }
+            #price-card-container > div > div:first-child > span {
+                line-height: 1.35;
+            }
+            #price-card-container > div > div:first-child > div {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            #price-card-container table,
+            #amortization-wrapper table {
+                min-width: 520px;
+                white-space: nowrap;
+            }
+            .plan-item {
+                padding: 0.85rem !important;
+            }
+            .plan-v,
+            .plan-v * {
+                overflow-wrap: anywhere;
+                word-break: break-word;
+            }
+            .paren-highlight {
+                display: inline !important;
+                padding: 0.08rem 0.28rem !important;
+                line-height: 1.8;
+            }
+            details summary {
+                align-items: flex-start !important;
+                flex-direction: column;
+            }
+            details summary > span:last-child {
+                align-self: flex-start;
+            }
+            .brand-tab,
+            .sop-car-tab {
+                min-height: 2.75rem;
+                line-height: 1.2;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            header, nav, button, input, select, textarea, #toast, .no-print, .brand-filters {
+                display: none !important;
+            }
+            .print-area {
+                display: block !important;
+                width: 100% !important;
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .plan-item {
+                border: 1px solid #ddd !important;
+                background: #fdfdfd !important;
+                color: black !important;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-mg-lightBg text-zinc-900 dark:bg-mg-darkBg dark:text-zinc-50 min-h-screen pb-24 font-sans selection:bg-mg-red/35">
+
+<header class="sticky top-0 z-50 bg-white/95 dark:bg-mg-darkBg/95 border-b border-zinc-200 dark:border-zinc-800 glass-panel no-print">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-mg-red rounded-lg flex items-center justify-center font-black text-xl text-white shadow-lg shadow-mg-red/30 tracking-tight transform hover:scale-105 active:scale-95 cursor-pointer">
+                MG
+            </div>
+            <div>
+                <h1 class="text-base md:text-lg font-extrabold tracking-wide flex items-center gap-1.5">
+                    銷售資訊系統 <span class="text-[10px] bg-mg-red/10 text-mg-red dark:bg-mg-red/20 px-2 py-0.5 rounded-full font-bold">桃園展示中心專用</span>
+                </h1>
+                <p class="text-[9px] text-zinc-500 dark:text-zinc-400 font-semibold tracking-widest uppercase">JULY 2026 Premium Business Tool</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <span class="text-[10px] md:text-xs text-mg-red font-extrabold bg-mg-red/10 dark:bg-mg-red/25 px-2.5 py-1 rounded-full border border-mg-red/20 shadow-sm animate-pulse">
+                最後更新：2026/07/01
+            </span>
+            <button onclick="toggleTheme()" class="w-9 h-9 rounded-full bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 flex items-center justify-center hover:bg-mg-red/10 hover:border-mg-red/30 text-zinc-700 dark:text-zinc-300 transition-all shadow-sm" title="切換深淺色模式">
+                <span id="theme-icon" class="text-lg">☀️</span>
+            </button>
+        </div>
+    </div>
+    
+    <nav class="max-w-6xl mx-auto px-4 flex gap-6 overflow-x-auto hide-scrollbar border-t border-zinc-100 dark:border-zinc-800/50">
+        <button onclick="switchSection(this, 'sec-models')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 text-mg-red border-mg-red shrink-0 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1-1v10M21 16V10a2 2 0 00-2-2h-5l-1.5-2.5A2 2 0 0010.8 5H4a2 2 0 00-2 2v9m19 0h-2m-2 0H5m14 0a2 2 0 002-2V10a2 2 0 00-2-2h-3m-1 8H9"></path>
+            </svg>
+            車型優惠與估單
+        </button>
+        <button onclick="switchSection(this, 'sec-calc')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 shrink-0 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+            </svg>
+            分期貸款神算
+        </button>
+        <button onclick="switchSection(this, 'sec-sop')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 shrink-0 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5a2 2 0 10-2 2h2zm0 0h4m-4 0H8m0 0a2 2 0 112-2v2zm0 0v12a2 2 0 01-2 2h4a2 2 0 002-2V8z"></path>
+            </svg>
+            本月試乘活動
+        </button>
+        <button onclick="switchSection(this, 'sec-beauty')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 shrink-0 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4m2 14v2m-1-1h2m7-17l1.5 3L22 7.5l-3.5 1.5L17 12l-1.5-3L12 7.5 15.5 6 17 3zM7 9l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4z"></path>
+            </svg>
+            汽車美容活動
+        </button>
+        <button onclick="switchSection(this, 'sec-pitch')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 shrink-0 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            實戰對抗話術庫
+        </button>
+    </nav>
+</header>
+
+<main class="max-w-4xl mx-auto px-4 pt-6">
+    <!-- ================== Section 1: 車型優惠與報價 ================== -->
+    <div id="sec-models" class="section-panel space-y-6">
+        
+        <div class="bg-white dark:bg-mg-darkCard p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg space-y-4 no-print">
+            <div class="grid grid-cols-3 gap-2">
+                <button onclick="switchBrand('hs', this)" class="brand-tab py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700/60">
+                    HS 系列
+                </button>
+                <button onclick="switchBrand('zs', this)" class="brand-tab py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all bg-mg-red text-white active-brand flex items-center justify-center gap-1.5">
+                    ZS 系列 <span class="w-2 h-2 rounded-full bg-mg-red animate-ping shrink-0"></span>
+                </button>
+                <button onclick="switchBrand('g50', this)" class="brand-tab py-2.5 rounded-xl text-xs md:text-sm font-bold transition-all text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700/60">
+                    G50 PLUS
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div id="filter-hs" class="brand-filters hidden space-y-1.5">
+                    <label class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">動力配置</label>
+                    <select id="hs-power" onchange="updateHSVariants()" class="w-full bg-zinc-100 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-mg-red outline-none">
+                        <option value="15">1.5T 汽油動力</option>
+                        <option value="20">2.0T AWD 四驅旗艦</option>
+                        <option value="phev">PHEV 插電式油電</option>
+                    </select>
+                </div>
+
+                <div id="filter-zs" class="brand-filters space-y-1.5">
+                    <label class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">ZS 車型分類</label>
+                    <select id="zs-type" onchange="updateZSVariants()" class="w-full bg-zinc-100 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-mg-red outline-none">
+                        <option value="std">心動版</option>
+                        <option value="flag">旗艦版</option>
+                    </select>
+                </div>
+                
+                <div id="variant-wrapper" class="space-y-1.5 w-full">
+                    <label class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">規格等級</label>
+                    <select id="hs-variant" onchange="showPriceCard()" class="brand-variant-select hidden w-full bg-zinc-100 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-mg-red outline-none">
+                        <!-- Dynamic Options -->
+                    </select>
+                    <select id="zs-variant" onchange="showPriceCard()" class="brand-variant-select w-full bg-zinc-100 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-mg-red outline-none">
+                        <!-- Dynamic Options -->
+                    </select>
+                    <select id="g50-variant" onchange="showPriceCard()" class="brand-variant-select hidden w-full bg-zinc-100 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm font-bold focus:ring-2 focus:ring-mg-red outline-none">
+                        <option value="g50-f" selected>旗艦版</option>
+                        <option value="g50-s">座享幸福特仕版 (7月方案已取消)</option>
+                        <option value="g50-c">酷涼特仕版 🔥</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="price-card-container" class="print-area"></div>
+    </div>
+
+    <!-- ================== Section 2: 貸款計算機 ================== -->
+    <div id="sec-calc" class="section-panel hidden space-y-6">
+        <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+                <span class="text-base font-extrabold flex items-center gap-2">
+                    <svg class="w-5 h-5 text-mg-red" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                    分期貸款試算器 (雙向滑動精裝版)
+                </span>
+                <span class="text-xs bg-mg-gold/10 text-mg-goldDark dark:text-mg-gold px-2.5 py-1 rounded-md font-bold">精準本息攤還</span>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- 貸款總額滑動與輸入 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">貸款總額 (萬)</label>
+                            <span id="label-amt" class="text-xs font-black text-mg-red">60 萬元</span>
+                        </div>
+                        <input type="range" id="slider-amt" min="10" max="150" step="1" value="60" oninput="syncSlider('amt')" class="w-full">
+                        <div class="relative">
+                            <input type="number" id="calc-amt" value="60" oninput="syncInput('amt')" class="w-full bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl pl-4 pr-12 py-3 text-sm font-bold focus:ring-2 focus:ring-mg-red outline-none">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-zinc-400">萬元</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 期數選擇 -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block">分期期數</label>
+                        <div class="pt-2"></div>
+                        <select id="calc-term" onchange="runCalc(); resetPresetActiveState();" class="w-full bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3.5 text-sm font-bold focus:ring-2 focus:ring-mg-red outline-none">
+                            <option value="12">12 期 (1年)</option>
+                            <option value="18">18 期</option>
+                            <option value="24">24 期 (2年)</option>
+                            <option value="30">30 期</option>
+                            <option value="36">36 期 (3年)</option>
+                            <option value="48">48 期 (4年)</option>
+                            <option value="50" selected>50 期</option>
+                            <option value="60">60 期 (5年)</option>
+                            <option value="72">72 期 (6年)</option>
+                            <option value="84">84 期 (7年)</option>
+                        </select>
+                    </div>
+
+                    <!-- 年利率滑動與輸入 -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">年利率 (%)</label>
+                            <span id="label-rate" class="text-xs font-black text-mg-red">1.99 %</span>
+                        </div>
+                        <input type="range" id="slider-rate" min="0" max="6" step="0.05" value="1.99" oninput="syncSlider('rate')" class="w-full">
+                        <div class="relative">
+                            <input type="number" id="calc-rate" value="1.99" step="0.01" oninput="syncInput('rate')" class="w-full bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl pl-4 pr-10 py-3 text-sm font-bold focus:ring-2 focus:ring-mg-red outline-none">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-zinc-400">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="runCalc()" class="w-full bg-mg-red text-white py-3.5 rounded-xl font-extrabold text-sm hover:bg-mg-redDark active:scale-98 transition-all shadow-md shadow-mg-red/20 flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    立即試算貸款本息
+                </button>
+
+                <!-- 計算結果面板 -->
+                <div id="calc-result" class="hidden bg-mg-gold/5 dark:bg-mg-gold/10 border-2 border-mg-gold/30 rounded-2xl p-5 space-y-4 shadow-inner">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white/60 dark:bg-zinc-800/40 p-3.5 rounded-xl border border-mg-gold/20 flex flex-col items-center text-center">
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400 font-bold mb-1">每月應繳金額</span>
+                            <span id="res-monthly" class="text-xl md:text-2xl font-black text-mg-goldDark dark:text-mg-gold">$0</span>
+                        </div>
+                        <div class="bg-white/60 dark:bg-zinc-800/40 p-3.5 rounded-xl border border-mg-gold/20 flex flex-col items-center text-center">
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400 font-bold mb-1">累積利息支出</span>
+                            <span id="res-interest" class="text-xl md:text-2xl font-black text-mg-goldDark dark:text-mg-gold">$0</span>
+                        </div>
+                        <div class="bg-white/60 dark:bg-zinc-800/40 p-3.5 rounded-xl border border-mg-gold/20 flex flex-col items-center text-center">
+                            <span class="text-xs text-zinc-500 dark:text-zinc-400 font-bold mb-1">還款本息總額</span>
+                            <span id="res-total" class="text-xl md:text-2xl font-black text-mg-goldDark dark:text-mg-gold">$0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-1.5">
+                        <div class="flex justify-between text-[11px] font-bold text-zinc-500 dark:text-zinc-400">
+                            <span>貸款本金比例: <b id="bar-pct-principal">100%</b></span>
+                            <span>利息比例: <b id="bar-pct-interest">0%</b></span>
+                        </div>
+                        <div class="w-full h-3 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden flex">
+                            <div id="bar-principal" class="h-full bg-mg-red" style="width: 100%"></div>
+                            <div id="bar-interest" class="h-full bg-mg-gold" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- 每月還款明細動態表 -->
+                    <div class="pt-2">
+                        <button onclick="toggleAmortizationTable()" class="text-xs text-zinc-500 dark:text-zinc-400 hover:text-mg-red font-black flex items-center gap-1 mx-auto underline">
+                            <span id="amort-btn-icon">👁️</span> <span id="amort-btn-text">顯示「本息平均攤還」每月遞減明細表</span>
+                        </button>
+                        
+                        <div id="amortization-wrapper" class="hidden mt-4 overflow-y-auto max-h-60 border border-zinc-200 dark:border-zinc-800 rounded-xl">
+                            <table class="w-full text-left border-collapse text-[11px]">
+                                <thead class="bg-zinc-100 dark:bg-zinc-800 sticky top-0 font-bold text-zinc-500 dark:text-zinc-400">
+                                    <tr>
+                                        <th class="p-2.5 text-center">期數</th>
+                                        <th class="p-2.5">償還本金</th>
+                                        <th class="p-2.5">償還利息</th>
+                                        <th class="p-2.5">每月償還額</th>
+                                        <th class="p-2.5 text-right">剩餘本金餘額</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="amortization-tbody" class="divide-y divide-zinc-100 dark:divide-zinc-800 font-bold text-zinc-600 dark:text-zinc-300">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================== Section 3: 本月試乘活動 ================== -->
+    <div id="sec-sop" class="section-panel hidden space-y-6">
+        
+        <!-- 3-Step SOP Banner -->
+        <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+                <span class="text-sm md:text-base font-extrabold flex items-center gap-2">7月本月試乘活動｜涼爽一夏 好禮乘現在</span>
+                <span class="text-xs bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 px-2.5 py-1 rounded-md font-bold">7/1-7/31</span>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-[1.2fr_0.8fr] gap-5 items-stretch">
+                    <div class="rounded-2xl overflow-hidden border border-cyan-200 dark:border-cyan-900/50 bg-cyan-50 dark:bg-cyan-950/20">
+                        <img src="./test-drive-campaign-july-2026.jpg" alt="MG 涼爽一夏 試乘即抽冰風扇活動" class="w-full h-full object-cover">
+                    </div>
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-5 space-y-4">
+                        <div>
+                            <span class="text-[11px] font-black text-cyan-700 dark:text-cyan-300 tracking-widest">活動主軸</span>
+                            <h3 class="text-xl font-black mt-1">預約試乘即抽夏季限定手持冰風扇</h3>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 text-xs font-bold">
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 p-3">
+                                <span class="block text-zinc-400 mb-1">活動期間</span>
+                                <b class="text-mg-red">即日起至 2026/7/31 23:59</b>
+                            </div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 p-3">
+                                <span class="block text-zinc-400 mb-1">活動獎項</span>
+                                <b>夏季限定手持冰風扇</b>
+                            </div>
+                        </div>
+                        <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                            顧客至 MG 經銷據點，於 HS、ZS、G50 PLUS 三款車型中擇一完成試乘，即有機會抽中限時好禮。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Step 1 -->
+                    <div class="border-l-4 border-mg-red pl-4 py-1 space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-mg-red text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black">1</span>
+                            <span class="font-extrabold text-sm">預約到店試乘</span>
+                        </div>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                            期間內完成預約並到店，由業務協助確認試乘流程與活動資格。
+                        </p>
+                    </div>
+                    <!-- Step 2 -->
+                    <div class="border-l-4 border-mg-gold pl-4 py-1 space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-mg-gold text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black">2</span>
+                            <span class="font-extrabold text-sm">三款車型擇一體驗</span>
+                        </div>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                            至 MG 經銷據點，於 <b>HS、ZS、G50 PLUS</b> 中擇一完成正式試乘。
+                        </p>
+                    </div>
+                    <!-- Step 3 -->
+                    <div class="border-l-4 border-emerald-500 pl-4 py-1 space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black">3</span>
+                            <span class="font-extrabold text-sm">抽夏季限定好禮</span>
+                        </div>
+                        <p class="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                            符合資格者可參加抽獎；中獎名單預計於 <b>2026/8/7</b> 公布於 MG Taiwan 官方社群。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JC PARK 電視牆導流活動 -->
+        <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-base font-extrabold flex items-center gap-2">JC PARK 春日館電視牆賞車導流</span>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold mt-1">電梯前輪播廣告，客戶掃 QR 登記賞車後由桃園所承接。</p>
+                </div>
+                <span class="text-xs bg-mg-red/10 text-mg-red dark:bg-mg-red/20 px-2.5 py-1 rounded-md font-bold shrink-0">JC PARK 限定導流</span>
+            </div>
+
+            <div class="p-6 grid grid-cols-1 md:grid-cols-[0.72fr_1.28fr] gap-6 items-start">
+                <div class="rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40">
+                    <img src="./jcpark-elevator-ad-july-2026.jpg" alt="JC PARK 春日館限定賞車送好禮電視牆廣告" class="w-full max-h-[520px] object-contain bg-white">
+                </div>
+
+                <div class="space-y-5">
+                    <div class="rounded-2xl border border-mg-red/25 bg-mg-red/5 dark:bg-mg-red/10 p-5 space-y-2">
+                        <span class="text-[11px] font-black text-mg-red tracking-widest">活動定位</span>
+                        <h3 class="text-lg font-black">看到電視牆掃碼預約，實際到店就用禮品提高成交互動</h3>
+                        <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                            此活動主攻 JC PARK 春日館電梯前人流，廣告輪播 G50 PLUS 與 ZS，客人可掃 QR 登記賞車；業務接洽時請確認來源並安排到店賞車或試乘。
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-4">
+                            <span class="text-[11px] font-black text-zinc-400 block mb-1">第 1 層</span>
+                            <b class="text-sm block">掃 QR 登記賞車</b>
+                            <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">由桃園所後續聯繫，確認賞車車款與到店時間。</p>
+                        </div>
+                        <div class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-4">
+                            <span class="text-[11px] font-black text-zinc-400 block mb-1">第 2 層</span>
+                            <b class="text-sm block">確實到店賞車：金屬杯墊</b>
+                            <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">客人有實際到桃園所賞車，即可用金屬杯墊提升來店誘因。</p>
+                        </div>
+                        <div class="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-4">
+                            <span class="text-[11px] font-black text-zinc-400 block mb-1">第 3 層</span>
+                            <b class="text-sm block">完成試乘：公司目前試乘禮修容組</b>
+                            <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">如客戶確實完成試乘，依公司現行試乘禮發放修容組。</p>
+                        </div>
+                        <div class="rounded-xl border-2 border-mg-red bg-mg-red/5 dark:bg-mg-red/10 p-4">
+                            <span class="text-[11px] font-black text-mg-red block mb-1">成交加碼</span>
+                            <b class="text-sm block">當下定車：桃園所加贈 MG 品牌保溫杯</b>
+                            <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">只限現場當下訂車加碼使用，可作為臨門一腳成交誘因。</p>
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/20 p-4 text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                        <b class="text-amber-800 dark:text-amber-300 block mb-1">業務提醒</b>
+                        請先確認客戶是否由 JC PARK 電視牆 QR 登記而來；禮品依「實際到店賞車」「完成試乘」「當下訂車」三個行為分層溝通，避免還沒到店或未完成試乘就先承諾所有禮品。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快速生成與文案輔助工具 -->
+        <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+                <span class="text-base font-extrabold flex items-center gap-2">桃園所 試乘邀約文快速生成器</span>
+                <span class="text-xs bg-zinc-200 dark:bg-zinc-700 px-2.5 py-1 rounded-md font-bold">業務隨身助手</span>
+            </div>
+            
+            <div class="p-6 space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block">1. 桃園據點粉專 (固定)</label>
+                        <div class="flex gap-2">
+                            <input type="text" value="MG 銘勁汽車 桃園展示中心" readonly class="w-full bg-zinc-100 dark:bg-zinc-800 text-zinc-400 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs font-bold outline-none cursor-not-allowed">
+                            <a href="https://www.facebook.com/mgmotor.ty" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-zinc-100 dark:bg-zinc-800 hover:bg-mg-red/10 border border-zinc-200 dark:border-zinc-700 hover:border-mg-red/30 rounded-xl text-xs font-extrabold flex items-center gap-1 shrink-0">
+                                🌐 開啟粉專
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5">
+                        <label class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block">2. 您的業務代稱 (將保存於裝置)</label>
+                        <div class="flex flex-col gap-2">
+                            <select id="sop-sales-select" onchange="handleSalespersonChange()" class="w-full bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs font-bold outline-none">
+                                <option value="MG 銘勁汽車 小高">MG 銘勁汽車 小高</option>
+                                <option value="MG 銘勁汽車-傅堃棋">MG 銘勁汽車-傅堃棋</option>
+                                <option value="MG 銘勁汽車 李敬平">MG 銘勁汽車 李敬平</option>
+                                <option value="MG 銘勁汽車 劉臻Ethan">MG 銘勁汽車 劉臻Ethan</option>
+                                <option value="Mg銘勁汽車王耀慶">Mg銘勁汽車王耀慶</option>
+                                <option value="custom">✍️ 手動新增/修改業務名稱...</option>
+                            </select>
+                            <input type="text" id="sop-sales-custom" placeholder="請輸入業務粉絲專頁名稱" oninput="updateSopTemplates()" class="hidden w-full bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-2.5 text-xs font-bold outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <span class="text-xs font-extrabold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider block">3. 選擇客人體驗車款</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button id="sop-btn-hs" onclick="switchSopCar('hs', this)" class="sop-car-tab py-2 rounded-xl text-xs font-bold transition-all bg-mg-red text-white active-sop-car">
+                            HS 主流 SUV
+                        </button>
+                        <button id="sop-btn-zs" onclick="switchSopCar('zs', this)" class="sop-car-tab py-2 rounded-xl text-xs font-bold transition-all text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700">
+                            ZS 潮玩跨界
+                        </button>
+                        <button id="sop-btn-g50" onclick="switchSopCar('g50', this)" class="sop-car-tab py-2 rounded-xl text-xs font-bold transition-all text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700">
+                            G50 PLUS
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bg-zinc-100 dark:bg-zinc-800/40 border border-zinc-200 dark:border-zinc-700/80 rounded-xl p-4 space-y-2">
+                    <span class="text-[11px] font-bold text-mg-goldDark dark:text-mg-gold block">👀 即時預覽推薦文：</span>
+                    <div id="sop-template-preview" contenteditable="true" class="bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 rounded-lg p-3 text-sm font-semibold text-zinc-800 dark:text-zinc-200 focus:ring-1 focus:ring-mg-red outline-none min-h-[80px]"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <button onclick="copySopTemplate()" class="bg-mg-red hover:bg-mg-redDark text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                        複製推薦文
+                    </button>
+                    <button onclick="shareToLine()" class="bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-1.5">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.843 10.06 9.588.39.084.922.258 1.058.592.121.303.079.778.038 1.084l-.171 1.027c-.05.303-.241 1.187 1.039.647 1.28-.54 6.893-4.059 9.402-6.953 1.764-1.921 2.532-3.916 2.532-5.985zm-16.79 3.018h-2.128v-5.234c0-.361-.293-.654-.654-.654-.36 0-.653.293-.653.654v5.888c0 .361.293.654.653.654h3.428c.361 0 .654-.293.654-.654 0-.361-.293-.654-.654-.654zm2.722-.654c0-.361-.293-.654-.654-.654h-.654v-3.926c0-.361-.293-.654-.654-.654s-.654.293-.654.654v4.58c0 .361.293.654.654.654h1.308c.361 0 .654-.293.654-.654zm1.962.654c0 .361-.293.654-.654.654s-.654-.293-.654-.654v-5.234c0-.361-.293-.654-.654-.654-.361 0-.654.293-.654.654v5.234c0 .361-.293.654-.654.654s-.654-.293-.654-.654v-5.234c0-.361-.293-.654-.654-.654s-.654.293-.654.654v5.888c0 .361.293.654.654.654h1.308c.361 0 .654-.293.654-.654v-.654zm5.888-5.234v5.234c0 .361-.293.654-.654.654h-3.428c-.361 0-.654-.293-.654-.654v-5.888c0-.361.293-.654.654-.654h3.428c.361 0 .654.293.654.654 0 .361-.293.654-.654.654h-2.774v1.308h1.962c.361 0 .654.293.654.654s-.293.654-.654.654h-1.962v1.308h2.774c.361 0 .654.293.654.654s-.293.654-.654.654z"/>
+                        </svg>
+                        LINE 傳送給客戶
+                    </button>
+                </div>
+
+                <div class="bg-zinc-50 dark:bg-zinc-800/30 border border-dashed border-zinc-200 dark:border-zinc-700 rounded-xl p-4 text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                    <b class="text-zinc-600 dark:text-zinc-300 block mb-1">※ 試乘邀約提醒：</b><br>
+                    這次活動重點是「完成預約並到店試乘」才有抽獎機會。邀約客戶時請清楚提醒活動期間至 <b>2026/7/31 23:59</b>，並協助客戶從 HS、ZS、G50 PLUS 中安排適合的試乘車款。
+                </div>
+            </div>
+        </div>
+
+        <!-- 本月試乘活動完整注意事項 -->
+        <div class="no-print border-t border-zinc-200 dark:border-zinc-800 pt-8 pb-4">
+            <div class="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 rounded-2xl border border-amber-200 dark:border-amber-900/60 p-6 space-y-4 shadow-sm">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-amber-200 dark:border-amber-900/40 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl">!</span>
+                        <div>
+                            <h4 class="text-sm font-extrabold text-amber-800 dark:text-amber-300">本月試乘活動完整說明</h4>
+                            <p class="text-[11px] text-amber-600 dark:text-amber-400">適合業務確認資格、抽獎與領獎規則時查看。</p>
+                        </div>
+                    </div>
+                    <div class="text-xs font-bold text-amber-800 dark:text-amber-300 bg-amber-200/50 dark:bg-amber-900/40 px-2.5 py-1 rounded-md shrink-0 self-start md:self-auto font-mono">
+                        獎項：夏季限定手持冰風扇
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                    <div class="bg-white dark:bg-mg-darkCard border border-amber-200 dark:border-amber-900/30 rounded-xl p-4 space-y-2">
+                        <b class="text-amber-800 dark:text-amber-300">活動流程</b>
+                        <p>至 MG 經銷據點，於三款車型 HS、ZS、G50 PLUS 中擇一完成試乘。</p>
+                        <p>活動期間：即日起至 2026/7/31 23:59。</p>
+                        <p>中獎公告：中獎名單將於 2026/8/7 公布於 MG Taiwan 官方社群。</p>
+                        <p>領獎方式：後續由經銷據點與中獎者接洽。</p>
+                    </div>
+                    <div class="bg-white dark:bg-mg-darkCard border border-amber-200 dark:border-amber-900/30 rounded-xl p-4 space-y-2">
+                        <b class="text-amber-800 dark:text-amber-300">注意事項</b>
+                        <p>每人限一次抽獎機會；活動結束後，MG Taiwan 將從符合抽獎資格者中抽出得獎名單。</p>
+                        <p>參加者需依活動規定完成所有步驟，活動資料依 MG Taiwan 系統與時間紀錄為準。</p>
+                        <p>獎項不得轉讓、指定、變更或兌換現金；若資料不完整或未於期限內完成回覆，視同放棄資格。</p>
+                        <p>主辦單位保留隨時修改、變更、終止本活動之權利，未盡事宜依 MG Taiwan 官方公告為準。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================== Section 4: 公司汽車美容活動 ================== -->
+    <div id="sec-beauty" class="section-panel hidden space-y-6">
+        <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-base font-extrabold text-mg-red">2026 清涼一夏 夏季健檢期間限定 美容優惠</span>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold mt-1">活動期間：2026/7/1-2026/8/31。可搭配交車、回廠保養與續約服務溝通。</p>
+                </div>
+                <span class="text-xs bg-mg-red/10 text-mg-red dark:bg-mg-red/20 px-2.5 py-1 rounded-md font-bold shrink-0">期間限定</span>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div class="rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-white">
+                    <img src="./car-beauty-campaign-2026.png" alt="2026清涼一夏汽車美容優惠活動表" class="w-full object-contain">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="rounded-2xl border-2 border-mg-red bg-mg-red/5 dark:bg-mg-red/10 p-5 space-y-4">
+                        <div>
+                            <span class="text-[10px] font-black text-mg-red tracking-widest">MJ9926006 (M/L)</span>
+                            <h3 class="text-lg font-black mt-1">超值防護 B</h3>
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400 font-bold mt-1">含前擋玻璃鍍膜</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 p-3">
+                                <span class="block text-[11px] text-zinc-400 font-bold">ZS / HS</span>
+                                <b class="text-mg-red text-lg">$3,200</b>
+                                <small class="block text-zinc-400 line-through">$4,600</small>
+                            </div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 p-3">
+                                <span class="block text-[11px] text-zinc-400 font-bold">G50</span>
+                                <b class="text-mg-red text-lg">$4,500</b>
+                                <small class="block text-zinc-400 line-through">$6,400</small>
+                            </div>
+                        </div>
+                        <div class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed space-y-1">
+                            <p>極緻手工美容上蠟</p>
+                            <p>跑瓷土、去鐵粉、頂級棕櫚蠟</p>
+                            <p>內裝清潔皮革上蠟</p>
+                            <p>前擋玻璃鍍膜</p>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-5 space-y-4">
+                        <div>
+                            <span class="text-[10px] font-black text-zinc-400 tracking-widest">MJ9926004 (M/L)</span>
+                            <h3 class="text-lg font-black mt-1">爍甲 A</h3>
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400 font-bold mt-1">贈全車玻璃鍍膜</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 p-3">
+                                <span class="block text-[11px] text-zinc-400 font-bold">ZS / HS</span>
+                                <b class="text-mg-red text-lg">$17,500</b>
+                                <small class="block text-zinc-400 line-through">$21,000</small>
+                            </div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 p-3">
+                                <span class="block text-[11px] text-zinc-400 font-bold">G50</span>
+                                <b class="text-mg-red text-lg">$22,000</b>
+                                <small class="block text-zinc-400 line-through">$25,500</small>
+                            </div>
+                        </div>
+                        <div class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed space-y-1">
+                            <p>Pro 手工美容</p>
+                            <p>極細研磨除痕</p>
+                            <p>太陽紋除痕</p>
+                            <p>全車玻璃鍍膜</p>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-5 space-y-4">
+                        <div>
+                            <span class="text-[10px] font-black text-zinc-400 tracking-widest">MJ9926005 (M/L)</span>
+                            <h3 class="text-lg font-black mt-1">爍甲 B</h3>
+                            <p class="text-xs text-zinc-500 dark:text-zinc-400 font-bold mt-1">贈全車玻璃鍍膜</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 p-3">
+                                <span class="block text-[11px] text-zinc-400 font-bold">ZS / HS</span>
+                                <b class="text-mg-red text-lg">$23,500</b>
+                                <small class="block text-zinc-400 line-through">$27,000</small>
+                            </div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-zinc-200 dark:border-zinc-800 p-3">
+                                <span class="block text-[11px] text-zinc-400 font-bold">G50</span>
+                                <b class="text-mg-red text-lg">$25,500</b>
+                                <small class="block text-zinc-400 line-through">$29,000</small>
+                            </div>
+                        </div>
+                        <div class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed space-y-1">
+                            <p>Max 手工美容</p>
+                            <p>極細研磨除痕</p>
+                            <p>太陽紋除痕</p>
+                            <p>全車玻璃鍍膜</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/20 p-5 space-y-3">
+                    <h4 class="text-sm font-black text-amber-800 dark:text-amber-300">加價購 50% sale</h4>
+                    <div class="space-y-2 text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                        <p>零件 / 美容（加價購）+ 車內消毒（5折優惠）：$750</p>
+                        <p>零件 / 美容（加價購）+ 引擎室清潔（5折優惠）：$850</p>
+                    </div>
+                </div>
+
+                <div class="rounded-xl border border-mg-red/20 bg-mg-red/5 dark:bg-mg-red/10 p-4 text-xs font-black text-mg-red leading-relaxed">
+                    期間限定方案與優惠券不可合併使用。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================== Section 4: 實戰對抗話術庫 ================== -->
+    <div id="sec-pitch" class="section-panel hidden space-y-6">
+        
+        <div id="pitch-auth-box" class="hidden"></div>
+        
+        <div id="pitch-content-area" class="space-y-6">
+            <div class="bg-mg-red/10 border-2 border-dashed border-mg-red text-mg-red py-3 px-4 rounded-xl text-xs font-black tracking-widest text-center">
+                ⚠️ 內部教育訓練機密文件・嚴禁截圖 or 外流給非展示中心同仁 ⚠️
+            </div>
+
+            <div class="bg-white dark:bg-mg-darkCard p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-sm flex gap-3">
+                <input type="text" id="pitch-search" oninput="filterPitches()" placeholder="🔍 快速搜尋話術主題或關鍵字（如：自製率、大改款、ZS、352、TNCAP、配件金）..." class="w-full bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-xs font-bold outline-none focus:ring-1 focus:ring-mg-red">
+            </div>
+
+            <div class="bg-white dark:bg-mg-darkCard p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                    <span class="text-sm font-black text-mg-red">實戰 QA 快速應答庫</span>
+                    <span class="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-bold px-2 py-0.5 rounded">晨會演練 / 現場成交 / LINE 回覆</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q1. 客人問：為什麼本月一直推 ZS 心動版？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「因為 ZS 心動版是這個月 CP 值最漂亮的車型，車價門檻低、配備完整，還有新鮮人 65 萬 65 期 0 利率 (元大)、通風椅或購車金可選。尤其藍色跟銀色本月資源最好，如果您能接受這兩個顏色，我會優先幫您搶最划算的條件。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q2. 客人問：ZS 心動版選購車金 2 萬，為什麼要改 ZS352？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「這是系統防呆，因為選購車金 2 萬後，車價會從 69.9 萬變成 67.9 萬，所以 SF 系統要選 ZS352 才會正確帶出車價。低首付貸款也會同步變成 65.9 萬，不可以再用原本 67.9 萬的貸款金額。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q3. 客人問：ZS 旗艦版還有車嗎？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「目前 ZS 旗艦版車源非常少，只剩最後 2 台銀色，而且是在其他經銷商手上。若您真的要旗艦版，我可以先幫您確認能不能調車，但交期與車源都要以實際確認為準。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q4. 客人問：通風椅可以馬上交車嗎？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「通風椅是經銷商選配、需要另外施工，通常可以先完成領牌，但交車會比一般現車再多抓約 2 到 3 週。為了不讓您白跑或期待落差，我會先把施工交期講清楚，再幫您安排最準的交車時間。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q5. 客人問：HS 現在買會不會快改款，買了就變舊？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「我懂您會擔心，但現在的 HS 反而是最成熟的時間點，配備完整、問題也都經過市場驗證。7 月還有第五年延長保固，從原本 4 年 / 12 萬公里升級到 5 年 / 14 萬公里，新車剛上市通常價格更硬、優惠也少。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q6. 客人問：HS 車主推薦親友買車有什麼好處？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「如果您身邊有 MG 車主推薦您購買 HS 1.5、2.0 或 PHEV，並在 7 月完成領牌，推薦人可以拿 MG APP 紅利 30 萬點，等值 3,000 元。簽約時記得把推薦車主姓名與車號寫在備註，我會協助您確認流程。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q7. 客人問：少數里程車是不是展示車或問題車？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「不是問題車，這批是配合法規抽測，主要是在實驗室馬力機上走行，所以里程會比一般新車高。交車前原廠仍會依新車標準檢查整備。如果您能接受，還可另送 30 萬點紅利，等值 3,000 元。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q8. 客人問：G50 少數里程車能不能加通風椅或套件？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「這批 G50 少數里程測試車不能加裝通風椅，也不能加裝套件，所以比較適合想要單純車價漂亮、能接受無通風椅無套件的客戶。如果您一定要通風椅或套件，我會改幫您看一般車源或酷涼特仕版。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q9. 客人問：試乘活動跟 JC PARK 掃碼賞車禮可以怎麼拿？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「7 月預約並到店試乘，符合資格可抽夏季限定手持冰風扇。若您是 JC PARK 電視牆掃 QR 來賞車，實際到店賞車可拿金屬杯墊，完成試乘可依公司現行試乘禮給修容組，若當下定車桃園所再加贈 MG 品牌保溫杯。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q10. 客人問：MG 跟其他品牌比，後續保養會不會比較麻煩？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「MG 現在是中華汽車體系在台灣正式經營，不是水貨車，也不是沒有後勤的品牌。自製率政策反而會讓零件供應更在地，未來保修速度與成本會更穩定。加上現在全台車主數越來越多，保修網點也持續擴張，後續照顧會比您想像中安心。」</p>
+                    </div>
+                    <div class="pitch-card rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 p-4 space-y-2">
+                        <span class="text-xs font-black text-mg-red">Q11. 客人問：HS 1.5 安全性跟同級車比起來如何？</span>
+                        <p class="text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">「HS 1.5 最大優勢之一就是已獲得 TNCAP 五星最高級別安全認證。最近客人也會拿同級競品來比，有些主流韓系競品公開安全測試表現只有 2 到 3 星，但 HS 1.5 是直接拿到最高五顆星。對家用 SUV 來說，安全不是配備表上寫好看而已，而是有第三方測試成績可以支撐，這點很值得優先考量。」</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pitch-cards-list" class="space-y-4">
+                <!-- 話術卡片 1 -->
+                <div class="pitch-card bg-white dark:bg-mg-darkCard border-l-4 border-mg-red rounded-r-2xl border border-zinc-200 dark:border-zinc-800 shadow-md p-5 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="text-sm font-black text-mg-red">【反擊政策】自製率與在地化零件政策防守</span>
+                        <span class="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-bold px-2 py-0.5 rounded">適用對象：擔心未來保修斷料的觀望客</span>
+                    </div>
+                    <div class="text-xs bg-zinc-50 dark:bg-zinc-800/40 p-2.5 rounded-lg border border-zinc-200/50 dark:border-zinc-800 font-bold text-zinc-500">
+                        核心觀念：政府政策促使國產化，反而讓零組件「本土供應」更充沛、保修更便宜快速的黃金轉折點！
+                    </div>
+                    <p class="text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium">
+                        「大姐您看，這其實是您的 <span class="text-mg-gold font-bold bg-mg-gold/5 dark:bg-mg-gold/15 px-1 rounded">最佳入場時機</span>！中華汽車是台灣上市幾十年的車界老字號，這次全力配合國家政策進行零件在地化，不僅產線與零件供應完全合規，更意味著未來的 <span class="font-bold underline text-mg-red">零件供應與保養會更加穩定、快速且便宜</span>！現在全台 MG 的車主基數非常大，原廠保修據點持續擴張，所有的售後保固權益與備料都受到 100% 法律保障。現在買，反而是零件最符合台灣用車氣候、在地程度最高、最沒有後顧之憂的時刻，此時不買真的非常可惜！」
+                    </p>
+                </div>
+
+                <!-- 話術卡片 2 -->
+                <div class="pitch-card bg-white dark:bg-mg-darkCard border-l-4 border-mg-red rounded-r-2xl border border-zinc-200 dark:border-zinc-800 shadow-md p-5 space-y-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <span class="text-sm font-black text-mg-red">【抗拒大改】HS 客戶想等「全新海外大改款」</span>
+                        <span class="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-bold px-2 py-0.5 rounded">適用對象：看完國外改款外型而猶豫的客戶</span>
+                    </div>
+                    <div class="text-xs bg-zinc-50 dark:bg-zinc-800/40 p-2.5 rounded-lg border border-zinc-200/50 dark:border-zinc-800 font-bold text-zinc-500">
+                        核心觀念：買末代神車配備滿、除錯完最穩定，且現行價格與購車金最高，新車上市必漲且無折價空間。
+                    </div>
+                    <p class="text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium">
+                        「大哥，我完全理解您想看最新車型的心情。但老實說，買車一定要買在 <span class="text-mg-gold font-bold bg-mg-gold/5 dark:bg-mg-gold/15 px-1 rounded">配備最滿、問題最少、價格最殺的末代巔峰期</span>。現行的 HS 經過市場百萬里程考驗，小毛病早就除錯光了，非常穩定。現在入手，我們 7 月不僅給您心動購車金，還獨家贈送 <span class="font-bold text-mg-red">『第五年延長保固（由原 4 年 / 12 萬公里升級至 5 年 / 14 萬公里，價值 1.5 萬）』</span>。未來如果大改款引進，定價很可能大幅調整，而且首批新車通常優惠空間有限，交期、配備與市場回饋也都需要時間觀察。現在現車還有經典的 <b>電掣白</b>，配備成熟又最劃算，不拿這波最頂級的優惠實在太劃不來了！」
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-mg-darkCard p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg space-y-4">
+                <span class="text-sm font-black flex items-center gap-1.5 text-mg-goldDark dark:text-mg-gold">
+                    📝 新增展間自訂實戰話術
+                </span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input type="text" id="new-pitch-title" placeholder="話術卡標題 (例：【保修防禦】客人問保固)" class="bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-1 focus:ring-mg-red">
+                    <input type="text" id="new-pitch-target" placeholder="適用對象/情境" class="bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-1 focus:ring-mg-red">
+                </div>
+                <textarea id="new-pitch-content" rows="3" placeholder="請在此輸入實戰攻勢話術內容..." class="w-full bg-zinc-50 dark:bg-mg-darkInput border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-xs font-bold outline-none focus:ring-1 focus:ring-mg-red"></textarea>
+                <button onclick="addCustomPitch()" class="w-full bg-mg-goldDark dark:bg-mg-gold hover:bg-mg-goldDark text-white dark:text-zinc-950 py-3 rounded-xl font-extrabold text-xs transition-all shadow">
+                    💾 將自訂話術保存至本機系統
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-zinc-900/95 dark:bg-zinc-50/95 text-white dark:text-zinc-950 py-3.5 px-6 rounded-xl text-xs font-extrabold shadow-2xl transition-all transform translate-y-24 opacity-0 pointer-events-none flex items-center gap-2 border border-zinc-800 dark:border-zinc-200 z-[9999]">
+    <span class="text-mg-red">⚡</span> <span id="toast-text">報價與明細已完美複製！</span>
+</div>
+
+<!-- ================== JavaScript Controller ================== -->
+<script>
+    let currentBrand = 'zs';
+    let currentSopCar = 'hs';
+    const SALES_LOCAL_KEY = 'mg_salesperson_selected';
+    const CUSTOM_SALES_KEY = 'mg_salesperson_custom';
+    const THEME_KEY = 'mg_system_theme';
+    const PITCH_UNLOCKED_KEY = 'mg_pitch_unlocked_2026';
+    const CUSTOM_PITCHES_KEY = 'mg_custom_pitches';
+    const FRESH_GRADUATE_NOTICE = '<div class="space-y-2 text-xs font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed"><p><b class="text-mg-red">適用對象（即為領牌人）：</b>西元 2025、2026 年高中職、大專院校、碩博士班畢業生之二等親內親屬。</p><p><b>二等親範圍：</b>直系血親（本人往上數兩代）長輩：父母、祖父母、外祖父母；旁系血親（與本人有共同祖先）平輩：兄弟姊妹（含同父異母、同母異父之手足）；姻親：配偶的直系血親（公婆、岳父母）、配偶的旁系血親（兄嫂、弟媳、姐夫、妹婿、妯娌、連襟）。僅以上親屬可適用此方案。</p><p><b>身分證明：</b>領牌人為畢業生本人，提供 2025、2026 年高中職、大專院校、碩博士班本人畢業證書；領牌人為畢業生二等親屬，提供畢業證書與雙方親屬關係證明（例：身分證、戶口名簿、戶籍謄本等）。上述身分證明需上傳照片至 SF 系統該有望客戶檔案區，供 MGT 存底查證。</p><p class="text-mg-red font-black">於 SF 下訂之後，請通知 MGT 彥婷審核，審核通過後方可進行後續銀行流程。</p></div>';
+    const VENTILATED_SEAT_NOTICE = '<div class="space-y-2 text-xs font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed"><p><b class="text-mg-red">交期提醒：</b>通風座椅屬特製/經銷商選配項目，安裝會使交車時間延長。</p><p>業務與客戶溝通時，請務必先說明：客戶可先完成領牌，但含通風座椅之車輛通常需等待約 2-3 週後才可交車，實際交期仍以施工排程與現場安排為準。</p><p class="text-mg-red font-black">請勿承諾立即交車或固定交車日，避免後續交期爭議。</p></div>';
+    const HS_OWNER_REFERRAL_NOTICE = '<div class="space-y-2 text-xs font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed"><p><b class="text-mg-red">活動內容：</b>現行 MG 車主推薦親友購買 HS 任一車款，並於活動期間完成領牌，推薦人（舊車主）可獲得 MG APP 紅利點數 <b>30 萬點</b>，等值 <b>3,000 元</b>。</p><p><b>適用 HS 車款：</b>HS 1.5、HS 2.0、HS PHEV。</p><p><b>活動日期：</b>2026/7/1-7/31 完成領牌。</p><p><b>作業流程：</b>1. 協助親友於 MG 官網完成 HS 試乘 / 賞車預約，預約頁需填上車主車號。2. 簽約時於備註欄位填上推薦車主姓名 / 車號。3. 親友於活動期間完成領牌。4. 車輛交付後，紅利點數將於 2 週內匯入推薦車主帳號。</p></div>';
+    const MILEAGE_BONUS_CARS = {
+        hs: [
+            ['HR38B', 'DNSS3290357', 'CG00', '1,115'],
+            ['HR700', '5HSR5200098', 'CG00', '24'],
+            ['HR700', '5HSR5200085', 'CG00', '13'],
+            ['HR380', 'DNSS5190444', 'UC00', '82']
+        ],
+        g50: [
+            ['BR380', 'FGSSA130143', 'JT00', '115'],
+            ['BR380', 'FGSS9100297', 'DK00', '117'],
+            ['BR380', 'FGSS9180330', 'DK00', '113'],
+            ['BR380', 'FGSS7170095', 'DK00', '123'],
+            ['BR380', 'EFGWSC240359', 'CI00', '234'],
+            ['BR380', 'EFGWSC280038', 'CI00', '116'],
+            ['BR380', 'EFGWSC280099', 'EZ00', '1,277'],
+            ['BR380', 'EFGWT130023', 'CI00', '120'],
+            ['BR380', 'EFGWT3060174', 'CI00', '137'],
+            ['BR380', 'EFGWT3060252', 'CI00', '106']
+        ]
+    };
+
+    // 7月份全新促案數據庫（同步參照七月促案.pdf）
+    const carData = {
+        'hs-15-flag': { 
+            name: 'HS 1.5T 旗艦版 (HR389) [準26年式]', original: 93.9, heart: 4, tag: '7月續走熱銷', 
+            discounts: [
+                { title: '【重要提醒】計程車/多元計程車/租賃車不適用第五年延長保固', perks: ['【經典現車】全台現車庫存僅剩：<span class="text-mg-red font-extrabold underline">電掣白</span> (其餘車色已全數完售，現車可即時交車)', '【推薦回饋】MG 車主推薦購車完成領牌，推薦人獲贈 <b>30 萬點紅利 (價值 3,000 元)</b>']},
+                { title: '【內部銷售提示】年份銷售說明口徑', perks: ['⚠️ <b class="text-mg-red">銷售口徑注意</b>：本月 HS 全車系所稱之「準26年式」，白話定義皆為 <b>2025 年生產之全新車款</b>。對客戶報價及介紹時，請統一使用「準26年式」尊貴包裝，切勿主動向客提及 2025 年生產以避免抗拒。']},
+                { title: '安全優勢、TNCAP 五星最高級別', perks: ['HS 1.5 已獲得 <b>TNCAP 五星最高級別安全認證</b>，可作為家庭客、安全配備比較客的重要成交主軸。相較部分同級競品公開測試僅 2 至 3 星，HS 1.5 可直接用「最高五顆星」建立安全信任。']},
+                { title: '優惠一、完成領牌即享', perks: ['「準26年式專屬心動購車金 4 萬」 (已於報價表抵扣，成交價為 89.9 萬)']},
+                { title: '優惠二、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.5 萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠四、輕鬆入主方案 (二選一)', plans: [
+                    { v: '方案一、分期特惠：(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 87.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 80 萬 60 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
+                    { v: '方案二、原廠配件金：直接折算原廠配件金 8,000 元', cash: true }
+                ]}
+            ]
+        },
+        'hs-15-max': { 
+            name: 'HS 1.5T MAX 升級版 (HR38E) [準26年式]', original: 93.9, heart: 1, tag: '豪華配備攻頂', 
+            discounts: [
+                { title: '【重要提醒】計程車/多元計程車/租賃車不適用第五年延長保固', perks: ['【車主推薦】MG 車主推薦親友購車完成領牌，推薦人獲贈 <b>30 萬點紅利 (價值 3,000 元)</b>']},
+                { title: '【內部銷售提示】年份銷售說明口徑', perks: ['⚠️ <b class="text-mg-red">銷售口徑注意</b>：本月 HS 全車系所稱之「準26年式」，白話定義皆為 <b>2025 年生產之全新車款</b>。']},
+                { title: '安全優勢、TNCAP 五星最高級別', perks: ['HS 1.5 已獲得 <b>TNCAP 五星最高級別安全認證</b>，可作為家庭客、安全配備比較客的重要成交主軸。相較部分同級競品公開測試僅 2 至 3 星，HS 1.5 可直接用「最高五顆星」建立安全信任。']},
+                { title: '優惠一、升級 MG 專屬配備項目 (價值 5.2 萬)', perks: ['包含：無邊框電子後視鏡暨行車紀錄器、風格側裙、全車座艙氣氛燈、專屬迎賓踏板、引擎室結構桿、尾門安全照明燈 (總價值 52,000 元)']},
+                { title: '優惠二、完成領牌即享', perks: ['「準26年式專屬心動購車金 1 萬」 (已於報價表抵扣，成交價為 92.9 萬)']},
+                { title: '優惠四、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.5 萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠五、輕鬆入主分期方案 (二選一)', plans: [
+                    { v: '方案一、分期特惠：(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 90.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 80 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
+                    { v: '方案二、原廠配件金：直接折算原廠配件金 10,000 元', cash: true }
+                ]}
+            ]
+        },
+        'hs-15-classic': { 
+            name: 'HS 1.5T 限量典藏版 (HR390) [準26年式]', original: 85.9, heart: 0, tag: '本月無供應', 
+            discounts: [
+                { title: '【重要提醒】本月無供應', perks: ['<b class="text-mg-red">※ 限量典藏版本月已無可供車源，請勿報價或承諾客戶。</b>']},
+                { title: '【內部銷售提示】年份銷售說明口徑', perks: ['⚠️ <b class="text-mg-red">銷售口徑注意</b>：本月 HS 全車系所稱之「準26年式」，白話定義皆為 <b>2025 年生產之全新車款</b>。']},
+                { title: '優惠一、輕鬆入主分期方案 (二選一)', plans: [
+                    { v: '方案一、分期特惠：(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 83.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 80 萬 60 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
+                    { v: '方案二、原廠高實用配件：原廠防水腳踏墊 ＋ 後行李箱防水墊 ＋ $3,000 元配件金', cash: true }
+                ]}
+            ]
+        },
+        'hs-20-max-pkg': { 
+            name: 'HS 2.0T MAX 四驅 升級套件版 (HR506) [準26年式]', original: 109.9, heart: 3, tag: '配備豪華旗艦', 
+            discounts: [
+                { title: '【內部提示】車型與配備規格公告', perks: ['【車型代號】HR506', '【包含套件】標配原廠特別升級套件（無邊框電子後視鏡、引擎室結構桿、風格側裙、尾門安全照明、座艙氣氛燈、迎賓踏板，總價值達 7 萬元）']},
+                { title: '優惠一、升級 MG 專屬配備', perks: ['HR506 專屬配備套件，總價值 <b>7 萬元</b>']},
+                { title: '優惠二、完成領牌即享', perks: ['「準26年式專屬心動購車金 3 萬元」 (已於報價表抵扣，成交價為 106.9 萬)']},
+                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 16,000 元) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠四、輕鬆入主分期方案 (二選一)', plans: [
+                    { v: '方案一、分期特惠：(1) 60 萬 30 期 0 利率 (元大) 或 (2) 99.9 萬 72 期 2.79% 或 (3) 88 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
+                    { v: '方案二、不分期折現：折算原廠配件金 10,000 元', cash: true }
+                ]}
+            ]
+        },
+        'hs-20-max-no-pkg': { 
+            name: 'HS 2.0T MAX 四驅 配件折現版 (HR501/506) [準26年式]', original: 109.9, heart: 8, tag: '現車超值激省 🔥', 
+            discounts: [
+                { title: '【內部提示】車型規格與折抵政策說明', perks: ['【車型代號】HR501（兌換購車金）', '升級 MG 專屬配備（總價值 7 萬）兌換為 <b>購車金 5 萬</b>。']},
+                { title: '優惠一、升級 MG 專屬配備兌換購車金', perks: ['「升級 MG 專屬配備」兌換 <b>購車金 5 萬</b>']},
+                { title: '優惠二、完成領牌即享', perks: ['「準26年式專屬心動購車金 3 萬元」 (成交價為 101.9 萬)']},
+                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.6 萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠四、輕鬆入主分期方案 (二選一)', plans: [
+                    { v: '方案一、分期特惠：(1) 60 萬 30 期 0 利率 (元大) 或 (2) 99.9 萬 72 期 2.79% 或 (3) 88 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
+                    { v: '方案二、不分期折現：折算原廠配件金 10,000 元', cash: true }
+                ]}
+            ]
+        },
+        'hs-20-classic': { 
+            name: 'HS 2.0T 限量典藏版 (HR590) [準26年式]', original: 99.9, heart: 0, tag: '本月無供應', 
+            discounts: [
+                { title: '【重要提醒】本月無供應', perks: ['<b class="text-mg-red">※ 限量典藏版本月已無可供車源，請勿報價或承諾客戶。</b>']},
+                { title: '優惠一、輕鬆入主分期方案 (三選一)', plans: [
+                    { v: '方案一、優惠分期：(1) 60 萬 30 期 0 利率 (元大) 或 (2) 80 萬 72 期 1.99% (元大) 或 (3) 低首付 2 萬 97.9 萬 72 期 2.79% (TAC)', cash: false, amt: 60, term: 30, rate: 0 }
+                ]}
+            ]
+        },
+        'hs-phev-max': { 
+            name: 'HS PHEV MAX (HR710/711) [準26年式]', original: 124.9, heart: 3, tag: '插電式油電強打', 
+            discounts: [
+                { title: '優惠一、升級 MG 專屬配備項目 (價值 7.2 萬)', perks: ['包含：無邊框電子後視鏡、風馳尾翼、HUD 抬頭顯示器、引擎下護板、尾門安全照明燈']},
+                { title: '優惠二、完成領牌即享', perks: ['「準26年式專屬購車金 <b>3 萬</b>」 (已於報價表抵扣)']},
+                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.8 萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠四、輕鬆入主好禮 (三選一)', plans: [
+                    { v: '方案一、優惠分期：(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 119.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 100 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 }
+                    ,{ v: '方案二、原廠配件金 10,000 元', cash: true }
+                    ,{ v: '方案三、tokuyo 美腿機 或 Panasonic 足腿按摩靴 (市價 22,800~23,800 元)', cash: true }
+                ]}
+            ]
+        },
+        'hs-phev-classic': { 
+            name: 'HS PHEV 限量典藏版 (HR790/791) [準26年式]', original: 124.9, heart: 8, tag: '本月無供應', 
+            discounts: [
+                { title: '【重要提醒】本月無供應', perks: ['<b class="text-mg-red">※ 限量典藏版本月已無可供車源，請勿報價或承諾客戶。</b>']},
+                { title: '優惠一、輕鬆入主方案 (三選一)', plans: [
+                    { v: '方案一、優惠貸款：(1) 80 萬 48 期 2.58% (元大) 或 (2) 60 萬 30 期 0 利率 (元大) 或 (3) 低首付 2 萬 114.9 萬 72 期 2.79% (TAC)', cash: false, amt: 60, term: 30, rate: 0 }
+                ]}
+            ]
+        },
+        'zs-std': { 
+            name: 'ZS 心動版 (ZS350/ZS351)', original: 69.9, heart: 0, tag: '7月新鮮人與通風椅加碼', 
+            discounts: [
+                { title: '【業務提醒】本月銷售重點與顏色獎金排序', perks: [
+                    '<b class="text-mg-red">本月銷售重點為 ZS 心動版。</b>',
+                    '顏色加碼獎金排序：<b>藍色、銀色最高</b>；其次為 <b>白色、黑色、紅色</b>。建議優先導向藍色與銀色車源。'
+                ]},
+                { title: '優惠一、好禮二選一', perks: [
+                    '<b>雙前座通風椅</b> (市價 25,000 元)<small class="text-zinc-500 block mt-2">⚠️ 通風座椅為特製產品，顧客可先領牌但實績需 2-3 週後才可交車。通風座椅為經銷商選配，保證期為 4 年或 12 萬公里，視何者先到為準；採吸風式，相較吹風式整體乘坐更舒適。</small>',
+                    '<b>購車金 20,000 元</b><small class="text-mg-red block mt-2 font-black">※ 若客戶選擇折購車金 2 萬，請改選「ZS352 購車金2萬版」；系統車價會變為 67.9 萬，低首付貸款金額會改為 65.9 萬。</small>'
+                ]},
+                { title: '優惠二、優惠貸款', plans: [
+                    { v: '方案一、超低月付：<b>1,688 元起</b> (前 6 個月)，50 萬 60 期 1.99% (元大)', cash: false, amt: 50, term: 60, rate: 1.99 },
+                    { v: '方案二、低首付特惠：首付 2 萬，67.9 萬 72 期 2.79% (TAC)', cash: false, amt: 67.9, term: 72, rate: 2.79 },
+                    { v: '方案三、60 萬 45 期 0 利率 (元大)', cash: false, amt: 60, term: 45, rate: 0 },
+                    { v: '方案四、新鮮人專案：65 萬 65 期 0 利率 (元大) <small class="block text-zinc-500 mt-2 leading-relaxed">適用 2025、2026 年畢業生或二等親內親屬；完整資格、文件與審核流程請見下方業務專屬提示。</small>', cash: false, amt: 65, term: 65, rate: 0 }
+                ]}
+            ]
+        },
+        'zs-std-352': { 
+            name: 'ZS 心動版 (ZS352) - 購車金2萬版', original: 69.9, heart: 2, tag: '7月購車金折抵款', 
+            discounts: [
+                { title: '【業務提醒】本月銷售重點與顏色獎金排序', perks: [
+                    '<b class="text-mg-red">本月銷售重點為 ZS 心動版。</b>',
+                    '顏色加碼獎金排序：<b>藍色、銀色最高</b>；其次為 <b>白色、黑色、紅色</b>。建議優先導向藍色與銀色車源。'
+                ]},
+                { title: '【重要規章】配件金換購車金折抵規則說明', perks: [
+                    '<b>※ 購車新制：</b>本車型即為心動版（原價 69.9 萬）選擇「購車金 20,000 元」之折抵車型。',
+                    '<b class="text-mg-red">※ SF 系統防呆：</b>若客戶選擇折抵 2 萬元，<b>SF 系統車型必須選取「ZS352」（原廠售價：67.9 萬元）</b>，才會正確帶出購車金後車價。',
+                    '<b class="text-mg-red">※ 低首付同步調整：</b>ZS352 選購車金後，低首付方案請用 <b>首付 2 萬，65.9 萬 72 期 2.79% (TAC)</b>，不可再用 ZS350/ZS351 的 67.9 萬貸款金額。'
+                ]},
+                { title: '優惠一、專屬優惠貸款方案', plans: [
+                    { v: '方案一、超低月付：<b>1,688 元起</b> (前 6 個月)，50 萬 60 期 1.99% (元大)', cash: false, amt: 50, term: 60, rate: 1.99 },
+                    { v: '方案二、低首付特惠：首付 2 萬，65.9 萬 72 期 2.79% (TAC)', cash: false, amt: 65.9, term: 72, rate: 2.79 },
+                    { v: '方案三、60 萬 45 期 0 利率 (元大)', cash: false, amt: 60, term: 45, rate: 0 },
+                    { v: '方案四、新鮮人專案：65 萬 65 期 0 利率 (元大) <small class="block text-zinc-500 mt-2 leading-relaxed">適用 2025、2026 年畢業生或二等親內親屬；完整資格、文件與審核流程請見下方業務專屬提示。</small>', cash: false, amt: 65, term: 65, rate: 0 }
+                ]}
+            ]
+        },
+        'zs-flag': { 
+            name: 'ZS 旗艦版 (ZS361)', original: 74.9, heart: 0, tag: '貸款 / 購車金 / 通風椅三選一', 
+            discounts: [
+                { title: '【內部提示】ZS 旗艦版車源與獎金提醒', perks: [
+                    '<b class="text-mg-red">ZS 旗艦版目前僅剩最後 2 台銀色，其餘車色皆無。</b>',
+                    '這 2 台銀色車源在其他經銷商手上，若採調車成交，<b class="text-mg-red">沒有加碼獎金</b>。報價與承諾交期前請先確認是否可調車。'
+                ]},
+                { title: '優惠一、輕鬆入主方案 (三選一：貸款 / 購車金 / 通風椅)', plans: [
+                    { v: '方案一、優惠貸款：(1) 低首付 2 萬 72.9 萬 72 期 2.79% (TAC) 或 (2) 低月付 50 萬 60 期 1.99% (元大) 或 (3) 60 萬 45 期 0 利率 (元大)', cash: false, amt: 60, term: 45, rate: 0 },
+                    { v: '方案二、<b>購車金 20,000 元</b>', cash: true },
+                    { v: '方案三、<b>雙前座通風椅</b> (市價 25,000 元)<small class="text-zinc-500 block mt-2">⚠️ 通風座椅為特製產品，顧客可先領牌但實績需 2-3 週後才可交車。通風座椅為經銷商選配，保證期為 4 年或 12 萬公里，視何者先到為準；採吸風式，相較吹風式整體乘坐更舒適。</small>', cash: true }
+                ]}
+            ]
+        },
+        'g50-f': { 
+            name: 'G50 PLUS 旗艦版', original: 108.5, heart: 0, tag: '7月強檔好禮2選1', 
+            discounts: [
+                { title: '【內部提示】G50 成交溝通建議', perks: ['可優先溝通 <b>G50 PLUS 旗艦版</b>，再依客戶需求 <b>單加第二排雙獨立電動座椅</b>。這樣與 <b>酷涼特仕版</b> 的主要差異在於：酷涼特仕版多了 <b>第二排通風功能</b>；若客戶不一定需要第二排通風，選旗艦版加第二排電動椅，整體加總價格會更划算，也能保留旗艦版 7 月外促彈性。']},
+                { title: '【外促調整】優惠一、好禮 2 選 1', perks: [
+                    '<b>免費升級第一排雙前座通風座椅</b> (市價 25,000 元)<small class="text-zinc-500 block mt-2">⚠️ 通風座椅為特製產品，顧客可先領牌但實績需 2-3 週後才可交車。通風座椅為經銷商選配，保證期為 4 年或 12 萬公里，視何者先到為準；採吸風式，相較吹風式整體乘坐更舒適。</small>',
+                    '<b>配件金 15,000 元</b>'
+                ]},
+                { title: '優惠二、輕鬆入主貸款方案 (三選一)', plans: [
+                    { v: '方案一、高額免息：<b>100 萬 30 期 0 利率 (元大)</b>', cash: false, amt: 100, term: 30, rate: 0 },
+                    { v: '方案二、低息長年期：<b>88 萬 72 期 1.99% (元大)</b>', cash: false, amt: 88, term: 72, rate: 1.99 },
+                    { v: '方案三、低自備特惠：裕融貸款 <b>106.5 萬 72 期 2.79%</b>', cash: false, amt: 106.5, term: 72, rate: 2.79 }
+                ]},
+                { title: '優惠三、限時升級 PREMIUM 優惠價', perks: [
+                    'PREMIUM 升級優惠價 <b>45,000 元</b> (原總市值達 60,000 元)',
+                    '加升項目：第二排雙獨立電動座椅、專屬 64 色氣氛燈、扶手飾板、音響飾框、迎賓燈、車門/尾門下緣飾條'
+                ]}
+            ]
+        },
+        'g50-s': { 
+            name: 'G50 PLUS 座享幸福特仕版 (BR380B)', original: 109.9, heart: 0, tag: '7月外促已取消', 
+            discounts: [
+                { title: '【7月外促調整】座享幸福特仕車方案已取消', perks: ['PDF 標示「售價 109.9 萬享免費升級第二排雙獨立電動座椅」已刪除，請勿再以 7 月促案向客戶說明。'] }
+            ]
+        },
+        'g50-c': { 
+            name: 'G50 PLUS 酷涼特仕版', original: 113.5, heart: 0, tag: '7月酷涼特仕大強打', 
+            discounts: [
+                { title: '【酷涼特仕版】優惠一、免費升級', perks: [
+                    '售價 <b>113.5 萬</b> 享免費升級<b>「前後排通風座椅 ＋ 後排電動椅」</b> (市價 90,000 元)',
+                    '<small class="text-zinc-500 block mt-1">⚠️ <b>通風座椅提醒：</b>通風座椅同 LEXUS 採吸風式乘坐體驗更棒。此為經銷商客製選配，保固為4年或12萬公里。顧客可先領牌，但客製出車預計需 2-3 週時間交車。</small>'
+                ]},
+                { title: '優惠二、輕鬆入主貸款方案 (三選一)', plans: [
+                    { v: '方案一、高額免息：<b>100 萬 30 期 0 利率 (元大)</b>', cash: false, amt: 100, term: 30, rate: 0 },
+                    { v: '方案二、低息長年期：<b>88 萬 72 期 1.99% (元大)</b>', cash: false, amt: 88, term: 72, rate: 1.99 },
+                    { v: '方案三、低自備特惠：裕融貸款 <b>106.5 萬 72 期 2.79%</b>', cash: false, amt: 106.5, term: 72, rate: 2.79 }
+                ]}
+            ]
+        }
+    };
+
+    window.onload = function() {
+        initTheme();
+        loadSalespersonPref();
+        updateHSVariants();
+        updateZSVariants();
+        updateSopTemplates();
+        loadCustomPitches();
+        runCalc();
+        highlightParenthesesInTextNodes();
+    };
+
+    function initTheme() {
+        const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+        const html = document.documentElement;
+        if (savedTheme === 'light') {
+            html.classList.remove('dark');
+            document.getElementById('theme-icon').textContent = '☀️';
+        } else {
+            html.classList.add('dark');
+            document.getElementById('theme-icon').textContent = '🌙';
+        }
+    }
+
+    function toggleTheme() {
+        const html = document.documentElement;
+        const icon = document.getElementById('theme-icon');
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            icon.textContent = '☀️';
+            localStorage.setItem(THEME_KEY, 'light');
+        } else {
+            html.classList.add('dark');
+            icon.textContent = '🌙';
+            localStorage.setItem(THEME_KEY, 'dark');
+        }
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        const toastText = document.getElementById('toast-text');
+        toastText.textContent = message;
+        
+        toast.classList.remove('translate-y-24', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        
+        setTimeout(() => {
+            toast.classList.add('translate-y-24', 'opacity-0');
+            toast.classList.remove('translate-y-0', 'opacity-100');
+        }, 3000);
+    }
+
+    function switchSection(btn, sectionId) {
+        document.querySelectorAll('.nav-btn').forEach(b => {
+            b.classList.remove('border-mg-red', 'text-mg-red');
+            b.classList.add('border-transparent', 'text-zinc-500');
+        });
+        btn.classList.remove('border-transparent', 'text-zinc-500');
+        btn.classList.add('border-mg-red', 'text-mg-red');
+
+        document.querySelectorAll('.section-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById(sectionId).classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (sectionId === 'sec-pitch') {
+            checkPitchAuthStatus();
+        }
+    }
+
+    // 貸款計算機：雙向滑桿與數值同步
+    function syncSlider(type) {
+        const slider = document.getElementById(`slider-${type}`);
+        const input = document.getElementById(`calc-${type}`);
+        const label = document.getElementById(`label-${type}`);
+        
+        input.value = slider.value;
+        if (type === 'amt') {
+            label.textContent = slider.value + ' 萬元';
+        } else if (type === 'rate') {
+            label.textContent = slider.value + ' %';
+        }
+        resetPresetActiveState();
+        runCalc();
+    }
+
+    function syncInput(type) {
+        const slider = document.getElementById(`slider-${type}`);
+        const input = document.getElementById(`calc-${type}`);
+        const label = document.getElementById(`label-${type}`);
+        
+        let val = parseFloat(input.value) || 0;
+        if (type === 'amt') {
+            if (val < 10) val = 10;
+            if (val > 150) val = 150;
+            slider.value = val;
+            label.textContent = val + ' 萬元';
+        } else if (type === 'rate') {
+            if (val < 0) val = 0;
+            if (val > 6) val = 6;
+            slider.value = val;
+            label.textContent = val + ' %';
+        }
+        resetPresetActiveState();
+        runCalc();
+    }
+
+    // 等額本息貸款試算與攤還明細表
+    function runCalc() {
+        const amtVal = parseFloat(document.getElementById('calc-amt').value) || 0;
+        const termVal = parseInt(document.getElementById('calc-term').value) || 12;
+        const rateVal = parseFloat(document.getElementById('calc-rate').value) || 0;
+
+        const principal = amtVal * 10000;
+        const monthlyRate = (rateVal / 12) / 100;
+        const term = termVal;
+
+        let monthlyPayment = 0;
+        let totalInterest = 0;
+        let totalRepayment = 0;
+
+        if (principal <= 0) {
+            document.getElementById('res-monthly').textContent = '$0';
+            document.getElementById('res-interest').textContent = '$0';
+            document.getElementById('res-total').textContent = '$0';
+            document.getElementById('amortization-tbody').innerHTML = '';
+            document.getElementById('calc-result').classList.add('hidden');
+            return;
+        }
+
+        if (monthlyRate === 0) {
+            monthlyPayment = principal / term;
+            totalRepayment = principal;
+            totalInterest = 0;
+        } else {
+            monthlyPayment = principal * (monthlyRate * Math.pow(1 + monthlyRate, term)) / (Math.pow(1 + monthlyRate, term) - 1);
+            totalRepayment = monthlyPayment * term;
+            totalInterest = totalRepayment - principal;
+        }
+
+        // 介面更新
+        document.getElementById('res-monthly').textContent = '$' + Math.round(monthlyPayment).toLocaleString();
+        document.getElementById('res-interest').textContent = '$' + Math.round(totalInterest).toLocaleString();
+        document.getElementById('res-total').textContent = '$' + Math.round(totalRepayment).toLocaleString();
+
+        // 圓條比例圖
+        const principalPct = totalRepayment > 0 ? (principal / totalRepayment) * 100 : 100;
+        const interestPct = totalRepayment > 0 ? (totalInterest / totalRepayment) * 100 : 0;
+
+        document.getElementById('bar-pct-principal').textContent = Math.round(principalPct) + '%';
+        document.getElementById('bar-pct-interest').textContent = Math.round(interestPct) + '%';
+
+        document.getElementById('bar-principal').style.width = principalPct + '%';
+        document.getElementById('bar-interest').style.width = interestPct + '%';
+
+        // 顯示結果
+        document.getElementById('calc-result').classList.remove('hidden');
+
+        // 生成每月還款明細
+        generateAmortizationSchedule(principal, monthlyRate, term, monthlyPayment);
+    }
+
+    function generateAmortizationSchedule(principal, monthlyRate, term, monthlyPayment) {
+        const tbody = document.getElementById('amortization-tbody');
+        tbody.innerHTML = '';
+        
+        let balance = principal;
+        for (let i = 1; i <= term; i++) {
+            let interestPayment = balance * monthlyRate;
+            let principalPayment = monthlyPayment - interestPayment;
+            
+            // 最後一期微調
+            if (i === term) {
+                principalPayment = balance;
+                monthlyPayment = principalPayment + interestPayment;
+                balance = 0;
+            } else {
+                balance -= principalPayment;
+            }
+
+            if (balance < 0) balance = 0;
+
+            const row = document.createElement('tr');
+            row.className = "hover:bg-zinc-50 dark:hover:bg-zinc-800/30";
+            row.innerHTML = `
+                <td class="p-2.5 text-center font-mono">${i}</td>
+                <td class="p-2.5">$${Math.round(principalPayment).toLocaleString()}</td>
+                <td class="p-2.5 text-mg-goldDark dark:text-mg-gold">$${Math.round(interestPayment).toLocaleString()}</td>
+                <td class="p-2.5 font-bold text-zinc-800 dark:text-zinc-100">$${Math.round(monthlyPayment).toLocaleString()}</td>
+                <td class="p-2.5 text-right font-mono">$${Math.round(balance).toLocaleString()}</td>
+            `;
+            tbody.appendChild(row);
+        }
+    }
+
+    function toggleAmortizationTable() {
+        const wrapper = document.getElementById('amortization-wrapper');
+        const icon = document.getElementById('amort-btn-icon');
+        const text = document.getElementById('amort-btn-text');
+
+        if (wrapper.classList.contains('hidden')) {
+            wrapper.classList.remove('hidden');
+            icon.textContent = '🙈';
+            text.textContent = '隱藏「本息平均攤還」每月遞減明細表';
+        } else {
+            wrapper.classList.add('hidden');
+            icon.textContent = '👁️';
+            text.textContent = '顯示「本息平均攤還」每月遞減明細表';
+        }
+    }
+
+    function resetPresetActiveState() {
+        document.querySelectorAll('.plan-item').forEach(item => {
+            item.classList.remove('border-mg-red', 'bg-mg-red/5', 'dark:bg-mg-red/10');
+            item.classList.add('border-zinc-200', 'dark:border-zinc-800', 'bg-zinc-50', 'dark:bg-zinc-800/30');
+        });
+    }
+
+    function switchBrand(brand, btn) {
+        currentBrand = brand;
+        
+        document.querySelectorAll('.brand-tab').forEach(t => {
+            t.classList.remove('bg-mg-red', 'text-white', 'active-brand');
+            t.classList.add('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-600', 'dark:text-zinc-400');
+        });
+        btn.classList.remove('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-600', 'dark:text-zinc-400');
+        btn.classList.add('bg-mg-red', 'text-white', 'active-brand');
+
+        const hsFilter = document.getElementById('filter-hs');
+        const zsFilter = document.getElementById('filter-zs');
+        if (brand === 'hs') {
+            hsFilter.classList.remove('hidden');
+        } else {
+            hsFilter.classList.add('hidden');
+        }
+        if (brand === 'zs') {
+            zsFilter.classList.remove('hidden');
+        } else {
+            zsFilter.classList.add('hidden');
+        }
+
+        document.querySelectorAll('.brand-variant-select').forEach(sel => sel.classList.add('hidden'));
+        const activeSelect = document.getElementById(`${brand}-variant`);
+        if (activeSelect) {
+            activeSelect.classList.remove('hidden');
+        }
+
+        if (brand === 'hs') {
+            updateHSVariants();
+        } else if (brand === 'zs') {
+            updateZSVariants();
+        } else {
+            showPriceCard();
+        }
+    }
+
+    function isInternalTitle(title) {
+        const list = ["內部", "提示", "庫存", "公告", "備註", "備忘", "口徑", "提醒", "車源狀態"];
+        return list.some(k => title.includes(k));
+    }
+
+    function moneyFromPoints(points, rate) {
+        return '$' + Math.round(points * rate).toLocaleString();
+    }
+
+    function getSalesPointRows(key) {
+        if (key === 'zs-std' || key === 'zs-std-352') {
+            return [
+                { label: 'ZS 26MY 心動版 藍 / 銀', points: 60, note: '本月最高點數；單台即可達 60 點門檻。' },
+                { label: 'ZS 26MY 心動版 白 / 黑 / 紅', points: 40, note: '本月次高點數；需搭配其他車累計到 60 點以上，單點才會升為 $120。' }
+            ];
+        }
+        if (key === 'zs-flag') {
+            return [
+                { label: 'ZS 26MY 旗艦版 銀', points: 40, note: '表定 40 點；但目前僅剩外經銷銀色車源，調車成交沒有加碼獎金，請先確認車源與獎金資格。' }
+            ];
+        }
+        if (key.startsWith('hs-')) {
+            return [
+                { label: 'HS', points: 20, note: '需搭配其他銷售累計到 60 點以上，單點才會升為 $120。' }
+            ];
+        }
+        if (key.startsWith('g50-')) {
+            return [
+                { label: 'G50 PLUS', points: 20, note: '需搭配其他銷售累計到 60 點以上，單點才會升為 $120。' }
+            ];
+        }
+        return [];
+    }
+
+    function renderSalesPointNotice(key) {
+        const rows = getSalesPointRows(key);
+        if (rows.length === 0) return '';
+
+        return `<div class="space-y-3">
+            <span class="text-xs font-black text-zinc-700 dark:text-zinc-300 border-l-4 border-amber-500 pl-2.5 block">${highlightPromoKeywords('【業務提醒】7月總代理加碼點數與獎金換算')}</span>
+            <div class="bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800/50 rounded-xl p-4 space-y-3">
+                <div class="text-xs font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                    專案期間：2026/7/1-7/31。月底總累計點數 <b>達 60 點以上</b>，單點獎金以 <b class="text-mg-red">$120</b> 計；未達 60 點，單點獎金以 <b>$100</b> 計。
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+                    <table class="w-full text-left text-[11px] font-bold">
+                        <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                            <tr>
+                                <th class="px-3 py-2">車型 / 顏色</th>
+                                <th class="px-3 py-2 text-center">單台點數</th>
+                                <th class="px-3 py-2 text-right">未達60點</th>
+                                <th class="px-3 py-2 text-right">達60點門檻</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
+                            ${rows.map(row => `
+                                <tr>
+                                    <td class="px-3 py-2 text-zinc-700 dark:text-zinc-200">
+                                        ${highlightPromoKeywords(row.label)}
+                                        <small class="block text-zinc-500 dark:text-zinc-400 mt-1 leading-relaxed">${highlightPromoKeywords(row.note)}</small>
+                                    </td>
+                                    <td class="px-3 py-2 text-center text-mg-red font-black">${row.points} 點</td>
+                                    <td class="px-3 py-2 text-right">${moneyFromPoints(row.points, 100)}</td>
+                                    <td class="px-3 py-2 text-right text-mg-red font-black">${moneyFromPoints(row.points, 120)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    function renderMileageBonusNotice(key) {
+        const group = key.startsWith('hs-') ? 'hs' : key.startsWith('g50-') ? 'g50' : '';
+        if (!group) return '';
+
+        const rows = MILEAGE_BONUS_CARS[group] || [];
+        const title = group === 'hs' ? 'HS 少數里程車加碼提醒' : 'G50 PLUS 少數里程車加碼提醒';
+        const extraNote = group === 'g50'
+            ? '<p><b class="text-mg-red">G50 接單提醒：</b>少數里程測試車不可加裝通風椅，也不可加裝套件；接單請以無通風椅、無套件訂單為主。</p>'
+            : '<p><b class="text-mg-red">HS 溝通提醒：</b>若客戶可接受少數里程車，請優先確認可供車源與加碼資格後再承諾。</p>';
+
+        return `<div class="space-y-3">
+            <span class="text-xs font-black text-zinc-700 dark:text-zinc-300 border-l-4 border-amber-500 pl-2.5 block">${highlightPromoKeywords('【業務提醒】' + title)}</span>
+            <div class="bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800/50 rounded-xl p-4 space-y-3">
+                <div class="space-y-2 text-xs font-bold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                    <p>此批車輛為對應環保署法規抽測用，單純於實驗室馬力機上走行，因此里程數較一般新車高；車廠於提車後仍會依新車標準檢查與整備後再出車。</p>
+                    <p><b class="text-mg-red">若客戶可接受少數里程車：</b>可另贈 MG APP 紅利點數 <b>30 萬點</b>（等值 <b>3,000 元</b>），銷售顧問另可加計 <b>出國點數 1 點</b>。</p>
+                    ${extraNote}
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+                    <table class="w-full text-left text-[11px] font-bold">
+                        <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                            <tr>
+                                <th class="px-3 py-2">車型</th>
+                                <th class="px-3 py-2">引擎 NO</th>
+                                <th class="px-3 py-2">車色</th>
+                                <th class="px-3 py-2 text-right">里程 km</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-zinc-200 dark:divide-zinc-700">
+                            ${rows.map(row => `
+                                <tr>
+                                    <td class="px-3 py-2 text-zinc-700 dark:text-zinc-200">${row[0]}</td>
+                                    <td class="px-3 py-2 font-mono text-zinc-600 dark:text-zinc-300">${row[1]}</td>
+                                    <td class="px-3 py-2">${row[2]}</td>
+                                    <td class="px-3 py-2 text-right text-mg-red font-black">${row[3]}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>`;
+    }
+
+    function fmtPrice(num) {
+        let val = parseFloat(num);
+        if (isNaN(val)) return '-';
+        let displayStr = Number.isInteger(val) ? val.toString() : val.toFixed(1).replace(/\.0$/, '');
+        return `${displayStr}<small class="text-xs font-bold ml-0.5 opacity-80">萬</small>`;
+    }
+
+    function fmtDisc(num) {
+        let val = parseFloat(num);
+        if (isNaN(val) || val === 0) return '-';
+        let displayStr = Number.isInteger(val) ? val.toString() : val.toFixed(1).replace(/\.0$/, '');
+        return `-${displayStr}<small class="text-xs font-bold ml-0.5 opacity-80">萬</small>`;
+    }
+
+    function cleanHtmlTags(html) {
+        let doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+    }
+
+    function highlightParentheses(text) {
+        return String(text).replace(/([（(])([^（）()]+)([）)])/g, (match, open, content, close) => {
+            if (/^\s*\d+\s*$/.test(content)) return match;
+            return `<span class="paren-highlight inline-block align-baseline mx-0.5 px-1.5 py-0.5 rounded-md bg-mg-gold/15 text-mg-goldDark dark:text-mg-gold border border-mg-gold/25 font-black">${open}${content}${close}</span>`;
+        });
+    }
+
+    function highlightPromoKeywords(text) {
+        return highlightParentheses(text)
+                   .replace(/或/g, '<span class="text-mg-red font-extrabold mx-1">或</span>')
+                   .replace(/[＋+]/g, '<span class="text-mg-red font-black">＋</span>');
+    }
+
+    function highlightParenthesesInTextNodes(root = document.body) {
+        if (!root) return;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+            acceptNode(node) {
+                const parent = node.parentElement;
+                if (!parent) return NodeFilter.FILTER_REJECT;
+                if (parent.closest('script, style, textarea, select, option, .paren-highlight')) return NodeFilter.FILTER_REJECT;
+                if (!/[（(][^（）()]+[）)]/.test(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+                return NodeFilter.FILTER_ACCEPT;
+            }
+        });
+
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+
+        nodes.forEach(node => {
+            const wrapper = document.createElement('span');
+            wrapper.innerHTML = highlightParentheses(node.nodeValue);
+            node.parentNode.replaceChild(wrapper, node);
+        });
+    }
+
+    function extractLoanAmt(segment) {
+        let matches = [...segment.matchAll(/(\d+(?:\.\d+)?)\s*萬/g)];
+        if (matches.length === 0) return null;
+        if (matches.length === 1) return parseFloat(matches[0][1]);
+        
+        for (let match of matches) {
+            let index = match.index;
+            let precedingText = segment.substring(Math.max(0, index - 12), index);
+            if (!precedingText.includes("首付") && !precedingText.includes("自備")) {
+                return parseFloat(match[1]);
+            }
+        }
+        let values = matches.map(m => parseFloat(m[1]));
+        return Math.max(...values);
+    }
+
+    function parseAndFormatPromo(text, isCash, transactionPrice) {
+        let cleanText = text.replace(/^方案[一二三四五][:：、]\s*/, '');
+        if (isCash) return highlightPromoKeywords(cleanText);
+        
+        let segments = cleanText.split('或');
+        return segments.map((seg) => {
+            let s = seg.trim();
+            let res = `<div class="p-1">${highlightPromoKeywords(s)}`;
+            
+            if (s.includes('1,688')) {
+                res += `<div class="mt-2 bg-mg-gold/10 text-mg-goldDark dark:text-mg-gold p-2 rounded-lg border border-mg-gold/20 text-xs font-bold">
+                    📌 預估月付梯次: 前 1-6 月 $1,688 / 第 7-12 月 $6,688 / 第 13 月起 $9,966
+                </div>`;
+            } else if (s.includes('萬') && s.includes('期')) {
+                let amt = extractLoanAmt(s);
+                let termMatch = s.match(/(\d+)\s*期/);
+                
+                if (amt !== null && termMatch) {
+                    let term = parseInt(termMatch[1]);
+                    let isZero = s.includes('0%') || s.includes('0利率');
+                    let rateMatch = s.match(/(\d+(?:\.\d+)?)\s*%/);
+                    let rate = isZero ? 0 : 2.5; 
+                    if (rateMatch && !isZero) {
+                        rate = parseFloat(rateMatch[1]);
+                    }
+                    
+                    let payment = 0;
+                    if (rate === 0) {
+                        payment = (amt * 10000) / term;
+                    } else {
+                        let mRate = (rate / 12) / 100;
+                        payment = (amt * 10000) * mRate * Math.pow(1+mRate, term) / (Math.pow(1+mRate, term) - 1);
+                    }
+                    let dp = (transactionPrice - amt) >= 0 ? Math.round((transactionPrice - amt) * 10) / 10 : 0;
+                    res += `<div class="mt-2 bg-mg-red/5 dark:bg-mg-red/10 p-2 rounded-lg border border-mg-red/10 text-xs text-zinc-500 dark:text-zinc-400 flex flex-wrap justify-between items-center gap-1">
+                        <span>預估自備首付: <b class="text-mg-red font-extrabold">$${Math.round(dp * 10000).toLocaleString()}</b></span>
+                        <span>預估月付款: <b class="text-zinc-800 dark:text-zinc-200 font-extrabold">$${Math.round(payment).toLocaleString()}</b></span>
+                    </div>`;
+                }
+            }
+            res += `</div>`;
+            return res;
+        }).join('<div class="my-2 border-t border-dashed border-zinc-200 dark:border-zinc-700/80"></div>');
+    }
+
+    function parseLoanPresetFromSegment(segment, fallbackPlan = {}) {
+        let amt = extractLoanAmt(segment);
+        let termMatch = segment.match(/(\d+)\s*期/);
+        let isZero = segment.includes('0%') || segment.includes('0利率') || segment.includes('0 利率');
+        let rateMatch = segment.match(/(\d+(?:\.\d+)?)\s*%/);
+
+        if (amt === null || !termMatch) {
+            return {
+                amt: fallbackPlan.amt,
+                term: fallbackPlan.term,
+                rate: fallbackPlan.rate
+            };
+        }
+
+        return {
+            amt,
+            term: parseInt(termMatch[1]),
+            rate: isZero ? 0 : (rateMatch ? parseFloat(rateMatch[1]) : fallbackPlan.rate)
+        };
+    }
+
+    function splitLoanPlanOptions(plan) {
+        if (plan.cash) return [plan];
+
+        let cleanText = plan.v.replace(/^方案[一二三四五][:：、]\s*/, '').trim();
+        let firstNumberedLoan = cleanText.search(/\(\d+\)/);
+        if (firstNumberedLoan === -1) return [plan];
+
+        let prefix = cleanText.substring(0, firstNumberedLoan).replace(/[：:、\s]+$/, '').trim();
+        let loanText = cleanText.substring(firstNumberedLoan);
+        let segments = [];
+        let pattern = /\(\d+\)\s*[\s\S]*?(?=\s*或\s*\(\d+\)|$)/g;
+        let match;
+
+        while ((match = pattern.exec(loanText)) !== null) {
+            let segment = match[0].replace(/^\s*或\s*/, '').trim();
+            if (segment) segments.push(segment);
+        }
+
+        if (segments.length <= 1) return [plan];
+
+        return segments.map((segment, idx) => {
+            let preset = parseLoanPresetFromSegment(segment, plan);
+            return {
+                ...plan,
+                v: `${prefix ? prefix + '：' : ''}${segment}`,
+                amt: preset.amt,
+                term: preset.term,
+                rate: preset.rate,
+                splitLoanOption: true,
+                splitLoanIndex: idx + 1
+            };
+        });
+    }
+
+    function renderSplitLoanOptions(loanOptions, transactionPrice) {
+        return `<div class="space-y-3">
+            <div class="text-[11px] font-black text-mg-red bg-mg-red/10 border border-mg-red/15 rounded-lg px-3 py-2">
+                以下貸款方案屬於同一項優惠，擇一使用
+            </div>
+            ${loanOptions.map((loan, idx) => `
+                <div class="rounded-xl border border-zinc-200 dark:border-zinc-700 bg-white/80 dark:bg-zinc-900/30 p-3">
+                    <span class="inline-block text-[9px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 px-2 py-0.5 rounded-full font-extrabold mb-2">貸款方案 ${idx + 1}</span>
+                    <div class="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-relaxed">${parseAndFormatPromo(loan.v, loan.cash, transactionPrice)}</div>
+                    ${loan.amt !== undefined && loan.term !== undefined && loan.rate !== undefined ? `
+                    <button onclick="event.stopPropagation(); loadPlanToCalc(${loan.amt}, ${loan.term}, ${loan.rate})" class="mt-3 w-full bg-zinc-800 dark:bg-zinc-700 hover:bg-mg-red text-white py-2 rounded-lg text-xs font-black flex items-center justify-center gap-1.5 transition-all">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                        </svg>
+                        載入此貸款至試算器
+                    </button>` : ''}
+                </div>
+            `).join('')}
+        </div>`;
+    }
+
+    function isChoiceDiscountTitle(title) {
+        return /[一二三四五六七八九十\d]+\s*選\s*[一1]/.test(title);
+    }
+
+    function updateHSVariants() {
+        const powerSelect = document.getElementById('hs-power');
+        const varSelect = document.getElementById('hs-variant');
+        if (!powerSelect || !varSelect) return;
+        const power = powerSelect.value;
+        varSelect.innerHTML = '';
+        
+        let options = [];
+        if (power === '15') {
+            options = [['hs-15-flag','旗艦版 (HR389)'], ['hs-15-max','MAX 升級版 (HR38E)']];
+        } else if (power === '20') {
+            options = [
+                ['hs-20-max-pkg','MAX 四驅 升級套件版 (HR506)'],
+                ['hs-20-max-no-pkg','MAX 四驅 配件折現版 (HR501/506) 🔥']
+            ];
+        } else {
+            options = [['hs-phev-max','MAX 插電版 (HR710/711)']];
+        }
+        
+        options.forEach(opt => {
+            const el = document.createElement('option');
+            el.value = opt[0];
+            el.textContent = opt[1];
+            varSelect.appendChild(el);
+        });
+        showPriceCard();
+    }
+
+    function updateZSVariants() {
+        const typeSelect = document.getElementById('zs-type');
+        const varSelect = document.getElementById('zs-variant');
+        if (!typeSelect || !varSelect) return;
+        const type = typeSelect.value;
+        varSelect.innerHTML = '';
+
+        let options = [];
+        if (type === 'std') {
+            options = [
+                ['zs-std','心動版 (ZS350/ZS351) - 通風椅/購車金二選一'],
+                ['zs-std-352','心動版 (ZS352) - 購車金2萬版 🔥']
+            ];
+        } else {
+            options = [
+                ['zs-flag','旗艦版 (ZS361) - 貸款/購車金/通風椅三選一']
+            ];
+        }
+
+        options.forEach(opt => {
+            const el = document.createElement('option');
+            el.value = opt[0];
+            el.textContent = opt[1];
+            varSelect.appendChild(el);
+        });
+        showPriceCard();
+    }
+
+    function showPriceCard() {
+        let key = '';
+        if (currentBrand === 'hs') {
+            key = document.getElementById('hs-variant').value;
+        } else if (currentBrand === 'zs') {
+            key = document.getElementById('zs-variant').value;
+        } else {
+            key = document.getElementById('g50-variant').value;
+        }
+
+        const data = carData[key];
+        if (!data) return;
+
+        const afterHeart = data.original - data.heart;
+        const finalPrice = afterHeart - 10;
+
+        let tableHtml = `
+            <div class="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800">
+                <table class="w-full text-left border-collapse text-xs md:text-sm">
+                    <thead>
+                        <tr class="bg-zinc-50 dark:bg-zinc-800/40 text-zinc-500 dark:text-zinc-400 font-extrabold uppercase tracking-wide border-b border-zinc-200 dark:border-zinc-800">
+                            <th class="py-3.5 px-4">報價明細項目</th>
+                            <th class="py-3.5 px-4 text-center">補貼折減</th>
+                            <th class="py-3.5 px-4 text-right">當期金額</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800/80 font-bold">
+                        <tr class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20">
+                            <td class="py-3.5 px-4 text-zinc-500 dark:text-zinc-400 font-medium">官方建議空車售價</td>
+                            <td class="py-3.5 px-4 text-center text-zinc-400">-</td>
+                            <td class="py-3.5 px-4 text-right text-zinc-800 dark:text-zinc-200">${fmtPrice(data.original)}</td>
+                        </tr>
+                        ${data.heart > 0 ? `
+                        <tr class="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20 text-mg-red">
+                            <td class="py-3.5 px-4 font-extrabold">品牌專屬購車金加碼</td>
+                            <td class="py-3.5 px-4 text-center">${fmtDisc(data.heart)}</td>
+                            <td class="py-3.5 px-4 text-right text-mg-red">${fmtPrice(afterHeart)}</td>
+                        </tr>` : ''}
+                        <tr class="bg-mg-gold/5 dark:bg-mg-gold/15 text-mg-goldDark dark:text-mg-gold border-y border-mg-gold/20">
+                            <td class="py-3.5 px-4 font-black">買車交易合約金額 (成交價)</td>
+                            <td class="py-3.5 px-4 text-center font-black">-</td>
+                            <td class="py-3.5 px-4 text-right font-black text-sm md:text-base">${fmtPrice(afterHeart)}</td>
+                        </tr>
+                        <tr class="text-zinc-500 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20">
+                            <td class="py-3.5 px-4 font-medium">政府貨物稅減徵補助 <span class="block text-[10px] text-zinc-400">(交車完成申報後核撥)</span></td>
+                            <td class="py-3.5 px-4 text-center">${fmtDisc(5)}</td>
+                            <td class="py-3.5 px-4 text-right text-zinc-700 dark:text-zinc-300">${fmtPrice(afterHeart - 5)}</td>
+                        </tr>
+                        <tr class="text-zinc-500 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/20">
+                            <td class="py-3.5 px-4 font-medium">政府舊換新廢鐵環保補助 <span class="block text-[10px] text-zinc-400">(交車完成申報後核撥)</span></td>
+                            <td class="py-3.5 px-4 text-center">${fmtDisc(5)}</td>
+                            <td class="py-3.5 px-4 text-right text-zinc-700 dark:text-zinc-300">${fmtPrice(finalPrice)}</td>
+                        </tr>
+                        <tr class="bg-gradient-to-r from-mg-red/10 to-mg-red/20 text-mg-red border-t-2 border-mg-red">
+                            <td class="py-4.5 px-4 font-black text-sm md:text-base">預估車主購車預算</td>
+                            <td class="py-4.5 px-4 text-center font-black">-</td>
+                            <td class="py-4.5 px-4 text-right font-black text-lg md:text-2xl">${fmtPrice(finalPrice)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
+
+        let customerDiscountsHtml = "";
+        let internalDiscountsHtml = "";
+        let hasInternal = false;
+        const hasFreshGraduatePlan = data.discounts.some(d => d.plans && d.plans.some(p => p.v.includes('新鮮人專案')));
+        const hasVentilatedSeatOffer = data.discounts.some(d => {
+            const text = [
+                d.title,
+                ...(d.perks || []),
+                ...((d.plans || []).map(p => p.v))
+            ].join(' ');
+            return text.includes('通風座椅') || text.includes('通風椅');
+        });
+
+        data.discounts.forEach((disc) => {
+            const isInternal = isInternalTitle(disc.title);
+
+            let discBlock = `<div class="space-y-3">
+                <span class="text-xs font-black text-zinc-700 dark:text-zinc-300 border-l-4 ${isInternal ? 'border-amber-500' : 'border-mg-red'} pl-2.5 block">${highlightPromoKeywords(disc.title)}</span>`;
+            
+            if (disc.plans) {
+                const displayPlans = disc.plans;
+                const gridClass = displayPlans.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
+                discBlock += `<div class="grid grid-cols-1 ${gridClass} gap-3">`;
+                displayPlans.forEach((pl, pIdx) => {
+                    const loanOptions = splitLoanPlanOptions(pl);
+                    const hasSplitLoans = loanOptions.length > 1;
+                    let hasValue = !hasSplitLoans && pl.amt !== undefined && pl.term !== undefined && pl.rate !== undefined;
+                    let badgeLabel = `優選方案 ${pIdx+1}`;
+                    let planContent = hasSplitLoans ? renderSplitLoanOptions(loanOptions, afterHeart) : parseAndFormatPromo(pl.v, pl.cash, afterHeart);
+                    discBlock += `
+                        <div class="plan-item group border-2 ${pIdx === 0 ? 'border-mg-red bg-mg-red/5 dark:bg-mg-red/10' : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/30'} hover:border-mg-red rounded-xl p-4 cursor-pointer transition-all flex flex-col justify-between" onclick="toggleActivePlan(this)">
+                            <div>
+                                <span class="inline-block text-[9px] bg-mg-red/10 text-mg-red px-2 py-0.5 rounded-full font-extrabold mb-2">${badgeLabel}</span>
+                                <div class="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-relaxed plan-v">${planContent}</div>
+                            </div>
+                            ${hasValue ? `
+                            <button onclick="event.stopPropagation(); loadPlanToCalc(${pl.amt}, ${pl.term}, ${pl.rate})" class="mt-4 w-full bg-zinc-800 dark:bg-zinc-700 hover:bg-mg-red group-hover:bg-mg-red text-white py-2 rounded-lg text-xs font-black flex items-center justify-center gap-1.5 transition-all">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                                </svg>
+                                載入此方案至試算器
+                            </button>` : ''}
+                        </div>
+                    `;
+                });
+                discBlock += `</div>`;
+            } else {
+                const choicePerks = disc.perks.filter(p => !String(p).trim().startsWith('<small'));
+                const notePerks = disc.perks.filter(p => String(p).trim().startsWith('<small'));
+
+                if (!isInternal && isChoiceDiscountTitle(disc.title) && choicePerks.length > 1) {
+                    const gridClass = choicePerks.length >= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2';
+                    discBlock += `<div class="grid grid-cols-1 ${gridClass} gap-3">`;
+                    choicePerks.forEach((p, pIdx) => {
+                        discBlock += `
+                            <div class="plan-item group border-2 ${pIdx === 0 ? 'border-mg-red bg-mg-red/5 dark:bg-mg-red/10' : 'border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/30'} hover:border-mg-red rounded-xl p-4 cursor-pointer transition-all" onclick="toggleActivePlan(this)">
+                                <span class="inline-block text-[9px] bg-mg-red/10 text-mg-red px-2 py-0.5 rounded-full font-extrabold mb-2">優選方案 ${pIdx+1}</span>
+                                <div class="text-xs font-bold text-zinc-800 dark:text-zinc-200 leading-relaxed">${highlightPromoKeywords(p)}</div>
+                            </div>
+                        `;
+                    });
+                    discBlock += `</div>`;
+                    if (notePerks.length > 0) {
+                        discBlock += `<div class="bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800/50 rounded-xl p-3 space-y-1">`;
+                        notePerks.forEach(p => {
+                            discBlock += `<div class="text-xs font-bold text-zinc-500 dark:text-zinc-400 leading-relaxed">${highlightPromoKeywords(p)}</div>`;
+                        });
+                        discBlock += `</div>`;
+                    }
+                } else {
+                    discBlock += `<div class="bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800/50 rounded-xl p-4 space-y-2">`;
+                    disc.perks.forEach(p => {
+                        discBlock += `<div class="flex items-start gap-2 text-xs font-bold text-zinc-600 dark:text-zinc-300">
+                            <span class="${isInternal ? 'text-amber-500' : 'text-mg-red'} mt-0.5">•</span>
+                            <span class="leading-relaxed">${highlightPromoKeywords(p)}</span>
+                        </div>`;
+                    });
+                    discBlock += `</div>`;
+                }
+            }
+            discBlock += `</div>`;
+
+            if (isInternal) {
+                internalDiscountsHtml += discBlock;
+                hasInternal = true;
+            } else {
+                customerDiscountsHtml += discBlock;
+            }
+        });
+
+        const salesPointNotice = renderSalesPointNotice(key);
+        if (salesPointNotice) {
+            internalDiscountsHtml += salesPointNotice;
+            hasInternal = true;
+        }
+
+        const mileageBonusNotice = renderMileageBonusNotice(key);
+        if (mileageBonusNotice) {
+            internalDiscountsHtml += mileageBonusNotice;
+            hasInternal = true;
+        }
+
+        if (key.startsWith('hs-')) {
+            internalDiscountsHtml += `<div class="space-y-3">
+                <span class="text-xs font-black text-zinc-700 dark:text-zinc-300 border-l-4 border-amber-500 pl-2.5 block">${highlightPromoKeywords('【業務提醒】HS 車主推薦購車回饋完整說明')}</span>
+                <div class="bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800/50 rounded-xl p-4">${highlightPromoKeywords(HS_OWNER_REFERRAL_NOTICE)}</div>
+            </div>`;
+            hasInternal = true;
+        }
+
+        if (hasFreshGraduatePlan) {
+            internalDiscountsHtml += `<div class="space-y-3">
+                <span class="text-xs font-black text-zinc-700 dark:text-zinc-300 border-l-4 border-amber-500 pl-2.5 block">${highlightPromoKeywords('【新鮮人專案完整說明】65 萬 65 期 0 利率 (元大)')}</span>
+                <div class="bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800/50 rounded-xl p-4">${highlightPromoKeywords(FRESH_GRADUATE_NOTICE)}</div>
+            </div>`;
+            hasInternal = true;
+        }
+
+        if (hasVentilatedSeatOffer) {
+            internalDiscountsHtml += `<div class="space-y-3">
+                <span class="text-xs font-black text-zinc-700 dark:text-zinc-300 border-l-4 border-amber-500 pl-2.5 block">${highlightPromoKeywords('【通風座椅交期提醒】避免交車爭議')}</span>
+                <div class="bg-zinc-50 dark:bg-zinc-800/20 border border-zinc-200 dark:border-zinc-800/50 rounded-xl p-4">${highlightPromoKeywords(VENTILATED_SEAT_NOTICE)}</div>
+            </div>`;
+            hasInternal = true;
+        }
+
+        document.getElementById('price-card-container').innerHTML = `
+            <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xl overflow-hidden">
+                <div class="px-6 py-4.5 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
+                    <span class="text-sm md:text-lg font-black tracking-wide">${highlightPromoKeywords(data.name)}</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs bg-mg-red text-white font-extrabold px-3 py-1 rounded-full shadow-md shadow-mg-red/20">${highlightPromoKeywords(data.tag)}</span>
+                    </div>
+                </div>
+                
+                <div class="p-6 space-y-6">
+                    ${tableHtml}
+                    
+                    <div class="border-t border-zinc-200 dark:border-zinc-800 pt-6 space-y-5">
+                        <h4 class="text-sm font-black text-zinc-800 dark:text-zinc-200 flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 bg-mg-red rounded-full"></span>
+                            7月當期專屬豪華禮遇明細
+                        </h4>
+                        ${customerDiscountsHtml}
+                    </div>
+
+                    <div class="pt-4 border-t border-zinc-200 dark:border-zinc-800 no-print">
+                        <button onclick="copyQuoteToClipboard('${key}')" class="w-full bg-mg-red hover:bg-mg-redDark text-white py-3.5 rounded-xl font-extrabold text-sm transition-all flex items-center justify-center gap-1.5 shadow-md shadow-mg-red/20">
+                            📝 複製此車款簡短報價
+                        </button>
+                    </div>
+
+                    <div class="pt-2 no-print">
+                        <div class="bg-zinc-50 dark:bg-zinc-800/30 border border-zinc-200 dark:border-zinc-800/80 rounded-xl p-4 text-[11px] text-zinc-400 leading-relaxed space-y-1">
+                            <b class="text-zinc-600 dark:text-zinc-300 block mb-1">※ 購車說明暨展間補貼規範：</b>
+                            <p>1. 貨物稅與舊換新補貼共 10 萬元，係交車完成後由政府主管機關審核撥付，此表列為取得成本參考預算。</p>
+                            <p>2. 貸款額度與自備款均以「成交合約金額」進行融資送審與核算。</p>
+                            <p>3. <b>多元計程車 / 個人計程車 / 租賃車，均不適用原廠第5年延長保固。</b></p>
+                            <p>4. 贈送之頂級防爆隔熱紙規格：前擋 UM70 + 前側 UM50 + 後側後擋 UM20 + 天窗 UM20。</p>
+                        </div>
+                    </div>
+
+                    <!-- 🔒 桃園展間業務專屬提示 -->
+                    ${hasInternal ? `
+                    <details class="no-print group border-2 border-dashed border-amber-300 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/10 rounded-2xl shadow-inner overflow-hidden">
+                        <summary class="list-none cursor-pointer px-5 py-4 flex items-center justify-between gap-3 text-amber-800 dark:text-amber-400 font-extrabold text-xs tracking-wider uppercase select-none">
+                            <span class="flex items-center gap-2">
+                                <span class="text-base">🔒</span>
+                                <span>桃園展示中心 業務專屬提示 (內部資料)</span>
+                            </span>
+                            <span class="text-[10px] bg-amber-100 dark:bg-amber-900/40 border border-amber-300/60 dark:border-amber-700/50 rounded-full px-2.5 py-1">
+                                <span class="group-open:hidden">點擊展開</span>
+                                <span class="hidden group-open:inline">收合隱藏</span>
+                            </span>
+                        </summary>
+                        <div class="px-5 pb-5 space-y-4">
+                            ${internalDiscountsHtml}
+                        </div>
+                    </details>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+        highlightParenthesesInTextNodes(document.getElementById('price-card-container'));
+    }
+
+    function toggleActivePlan(el) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.plan-item').forEach(item => {
+            item.classList.remove('border-mg-red', 'bg-mg-red/5', 'dark:bg-mg-red/10');
+            item.classList.add('border-zinc-200', 'dark:border-zinc-800', 'bg-zinc-50', 'dark:bg-zinc-800/30');
+        });
+        el.classList.remove('border-zinc-200', 'dark:border-zinc-800', 'bg-zinc-50', 'dark:bg-zinc-800/30');
+        el.classList.add('border-mg-red', 'bg-mg-red/5', 'dark:bg-mg-red/10');
+    }
+
+    function loadPlanToCalc(amt, term, rate) {
+        document.getElementById('calc-amt').value = amt;
+        document.getElementById('calc-term').value = term;
+        document.getElementById('calc-rate').value = rate;
+        
+        document.getElementById('slider-amt').value = amt;
+        document.getElementById('slider-rate').value = rate;
+        document.getElementById('label-amt').textContent = amt + ' 萬元';
+        document.getElementById('label-rate').textContent = rate + ' %';
+        
+        const calcNavBtn = Array.from(document.querySelectorAll('.nav-btn')).find(b => b.textContent.includes('分期貸款'));
+        if (calcNavBtn) {
+            switchSection(calcNavBtn, 'sec-calc');
+        }
+        
+        runCalc();
+        showToast(`已將「${amt}萬 ${term}期 ${rate}%」載入計算器並完成試算！`);
+    }
+
+    function copyQuoteToClipboard(key) {
+        const data = carData[key];
+        if (!data) return;
+
+        const afterHeart = data.original - data.heart;
+        const finalPrice = afterHeart - 10;
+
+        let quoteText = `【MG 桃園展示中心 7月盛夏特惠報價】\n`;
+        quoteText += `────────────────────\n`;
+        quoteText += `車款規格：${data.name}\n`;
+        quoteText += `官方建議空車售價：${data.original} 萬\n`;
+        if (data.heart > 0) {
+            quoteText += `品牌專屬加碼購車金：-${data.heart} 萬\n`;
+            quoteText += `👉 買車合約成交價：${afterHeart} 萬\n`;
+        } else {
+            quoteText += `👉 買車合約成交價：${data.original} 萬\n`;
+        }
+        quoteText += `────────────────────\n`;
+        quoteText += `政府貨物稅減免 + 舊換新補助：-10 萬\n`;
+        quoteText += `車主預估最終取得預算：${finalPrice} 萬\n`;
+        quoteText += `────────────────────\n`;
+        quoteText += `※ 補助撥付時程依主管機關核准為準。桃園展示中心專業團隊竭誠為您服務，歡迎預約賞車試乘！`;
+
+        const textarea = document.createElement('textarea');
+        textarea.value = quoteText;
+        textarea.style.position = 'fixed';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            showToast("7月車款報價已成功複製到剪貼簿！");
+        } catch (err) {
+            showToast("複製失敗，請手動複製。");
+        }
+        document.body.removeChild(textarea);
+    }
+
+    function loadSalespersonPref() {
+        const select = document.getElementById('sop-sales-select');
+        const customInput = document.getElementById('sop-sales-custom');
+        const savedVal = localStorage.getItem(SALES_LOCAL_KEY);
+        const savedCustomVal = localStorage.getItem(CUSTOM_SALES_KEY);
+        
+        if (savedVal) {
+            select.value = savedVal;
+            if (savedVal === 'custom') {
+                customInput.classList.remove('hidden');
+                if (savedCustomVal) customInput.value = savedCustomVal;
+            }
+        }
+    }
+
+    function handleSalespersonChange() {
+        const select = document.getElementById('sop-sales-select');
+        const customInput = document.getElementById('sop-sales-custom');
+        localStorage.setItem(SALES_LOCAL_KEY, select.value);
+        
+        if (select.value === 'custom') {
+            customInput.classList.remove('hidden');
+        } else {
+            customInput.classList.add('hidden');
+        }
+        updateSopTemplates();
+    }
+
+    function switchSopCar(car, btn) {
+        currentSopCar = car;
+        document.querySelectorAll('.sop-car-tab').forEach(t => {
+            t.classList.remove('bg-mg-red', 'text-white', 'active-sop-car');
+            t.classList.add('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-600', 'dark:text-zinc-400');
+        });
+        btn.classList.remove('bg-zinc-100', 'dark:bg-zinc-800', 'text-zinc-600', 'dark:text-zinc-400');
+        btn.classList.add('bg-mg-red', 'text-white', 'active-sop-car');
+        updateSopTemplates();
+    }
+
+    function updateSopTemplates() {
+        const select = document.getElementById('sop-sales-select');
+        const customInput = document.getElementById('sop-sales-custom');
+        
+        let fanpage = "MG 銘勁汽車 桃園展示中心";
+        let salesName = select.value === 'custom' ? customInput.value.trim() : select.value;
+        if (select.value === 'custom') {
+            localStorage.setItem(CUSTOM_SALES_KEY, customInput.value);
+        }
+
+        if (!salesName) {
+            salesName = '[業務專屬粉專]';
+        }
+
+        let text = "";
+        if (currentSopCar === 'hs') {
+            text = `7月來 @${fanpage} 預約試乘 HS，體驗滿配安全科技與舒適座艙，服務專業的 @${salesName} 會協助安排。本月活動完成預約並到店試乘，就有機會抽夏季限定手持冰風扇。活動至 2026/7/31 23:59 止。 #MG #HS #涼爽一夏 #試乘抽好禮`;
+        } else if (currentSopCar === 'zs') {
+            text = `7月來 @${fanpage} 預約試乘 ZS，潮玩跨界休旅、安全配備與都會靈活度一次體驗，推薦找 @${salesName} 協助安排。本月完成預約並到店試乘，就有機會抽夏季限定手持冰風扇。活動至 2026/7/31 23:59 止。 #MG #ZS #涼爽一夏 #試乘抽好禮`;
+        } else {
+            text = `7月來 @${fanpage} 預約試乘 G50 PLUS，七人座大空間與舒適配備很適合全家一起體驗，推薦找 @${salesName} 協助安排。本月完成預約並到店試乘，就有機會抽夏季限定手持冰風扇。活動至 2026/7/31 23:59 止。 #MG #G50PLUS #涼爽一夏 #試乘抽好禮`;
+        }
+
+        document.getElementById('sop-template-preview').textContent = text;
+    }
+
+    function copySopTemplate() {
+        const textToCopy = document.getElementById('sop-template-preview').textContent;
+        const textarea = document.createElement('textarea');
+        textarea.value = textToCopy;
+        textarea.style.position = 'fixed';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            showToast("推薦文本已複製，可直接傳給客戶發文！");
+        } catch (err) {
+            showToast("複製失敗，請手動複製預覽框內文字");
+        }
+        document.body.removeChild(textarea);
+    }
+
+    function shareToLine() {
+        const textToCopy = document.getElementById('sop-template-preview').textContent;
+        const lineUrl = `https://line.me/R/msg/text/?${encodeURIComponent(textToCopy)}`;
+        window.open(lineUrl, '_blank');
+    }
+
+    function flipCard(cardEl) {
+        const inner = cardEl.querySelector('.card-inner');
+        inner.classList.toggle('card-flipped');
+    }
+
+    function checkPitchAuthStatus() {
+        document.getElementById('pitch-auth-box').classList.add('hidden');
+        document.getElementById('pitch-content-area').classList.remove('hidden');
+    }
+
+    function checkPitchPassword() {
+        checkPitchAuthStatus();
+        showToast("實戰話術庫已開放瀏覽！");
+    }
+
+    function handleAuthKeyDown(e) {
+        if (e.key === 'Enter') checkPitchPassword();
+    }
+
+    function filterPitches() {
+        const query = document.getElementById('pitch-search').value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.pitch-card');
+        
+        cards.forEach(card => {
+            const text = card.textContent.toLowerCase();
+            if (text.includes(query)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function loadCustomPitches() {
+        const saved = localStorage.getItem(CUSTOM_PITCHES_KEY);
+        if (saved) {
+            const list = JSON.parse(saved);
+            list.forEach((p, idx) => renderPitchCard(p.title, p.target, p.content, true, idx));
+        }
+    }
+
+    function addCustomPitch() {
+        const titleInput = document.getElementById('new-pitch-title');
+        const targetInput = document.getElementById('new-pitch-target');
+        const contentInput = document.getElementById('new-pitch-content');
+
+        const title = titleInput.value.trim();
+        const target = targetInput.value.trim();
+        const content = contentInput.value.trim();
+
+        if (!title || !content) {
+            showToast("請輸入話術標題與內容！");
+            return;
+        }
+
+        const saved = localStorage.getItem(CUSTOM_PITCHES_KEY);
+        const list = saved ? JSON.parse(saved) : [];
+        list.push({ title, target, content });
+        localStorage.setItem(CUSTOM_PITCHES_KEY, JSON.stringify(list));
+
+        refreshCustomPitchesUI(list);
+
+        titleInput.value = '';
+        targetInput.value = '';
+        contentInput.value = '';
+
+        showToast("自訂實戰話術已成功保存並添加至下方庫中！");
+    }
+
+    function deleteCustomPitch(idx) {
+        const saved = localStorage.getItem(CUSTOM_PITCHES_KEY);
+        if (!saved) return;
+        let list = JSON.parse(saved);
+        list.splice(idx, 1);
+        localStorage.setItem(CUSTOM_PITCHES_KEY, JSON.stringify(list));
+        refreshCustomPitchesUI(list);
+        showToast("該自訂話術已從本機系統刪除。");
+    }
+
+    function refreshCustomPitchesUI(list) {
+        document.querySelectorAll('.custom-pitch-card').forEach(el => el.remove());
+        list.forEach((p, idx) => renderPitchCard(p.title, p.target, p.content, true, idx));
+    }
+
+    function renderPitchCard(title, target, content, isCustom = false, index = null) {
+        const container = document.getElementById('pitch-cards-list');
+        const card = document.createElement('div');
+        card.className = "pitch-card bg-white dark:bg-mg-darkCard border-l-4 border-mg-gold rounded-r-2xl border border-zinc-200 dark:border-zinc-800 shadow-md p-5 space-y-3";
+        if (isCustom) {
+            card.classList.add('custom-pitch-card');
+        }
+        
+        card.innerHTML = `
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-sm font-black text-mg-goldDark dark:text-mg-gold">${title}</span>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] bg-zinc-100 dark:bg-zinc-800 text-zinc-500 font-bold px-2 py-0.5 rounded">
+                        自訂話術情境: ${target || '通用'}
+                    </span>
+                    ${isCustom && index !== null ? `
+                        <button onclick="deleteCustomPitch(${index})" class="text-zinc-400 hover:text-mg-red p-1 transition-all" title="刪除此自訂話術">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+            <p class="text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium">
+                ${content}
+            </p>
+        `;
+        container.insertBefore(card, container.firstChild);
+    }
+</script>
+</body>
+</html>
