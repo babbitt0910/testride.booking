@@ -95,6 +95,44 @@
         .card-back {
             transform: rotateY(180deg);
         }
+        .compare-table {
+            width: max-content;
+            min-width: 100%;
+            font-size: 11px;
+            line-height: 1.55;
+        }
+        .compare-table th,
+        .compare-table td {
+            padding: 0.65rem 0.8rem !important;
+            vertical-align: middle;
+        }
+        .compare-table .price-main {
+            font-size: 1rem;
+            white-space: nowrap;
+        }
+        .compare-table .tight-cell {
+            white-space: nowrap;
+        }
+        .compare-table .plan-cell {
+            min-width: 330px;
+        }
+        .compare-table .diff-cell {
+            min-width: 220px;
+        }
+        .compare-table .judgement-cell {
+            min-width: 190px;
+        }
+        .bonus-table {
+            width: max-content;
+            min-width: auto;
+            font-size: 11px;
+            line-height: 1.45;
+        }
+        .bonus-table th,
+        .bonus-table td {
+            padding: 0.45rem 0.65rem !important;
+            vertical-align: middle;
+        }
 
         @media (max-width: 640px) {
             body {
@@ -138,6 +176,12 @@
             #price-card-container {
                 overflow-wrap: break-word;
                 word-break: break-word;
+            }
+            .no-wrap-table,
+            .no-wrap-table * {
+                white-space: nowrap;
+                overflow-wrap: normal;
+                word-break: normal;
             }
             button,
             select,
@@ -259,6 +303,13 @@
             </button>
         </div>
     </div>
+
+    <div class="max-w-6xl mx-auto px-4 pb-2">
+        <div class="rounded-xl border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 px-4 py-2 text-[11px] md:text-xs font-black text-amber-800 dark:text-amber-300 flex items-center gap-2">
+            <span>🔒</span>
+            <span>內部資料｜請勿直接傳給客戶</span>
+        </div>
+    </div>
     
     <nav class="max-w-6xl mx-auto px-4 flex gap-6 overflow-x-auto hide-scrollbar border-t border-zinc-100 dark:border-zinc-800/50">
         <button onclick="switchSection(this, 'sec-models')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 text-mg-red border-mg-red shrink-0 flex items-center gap-2">
@@ -285,6 +336,24 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4m2 14v2m-1-1h2m7-17l1.5 3L22 7.5l-3.5 1.5L17 12l-1.5-3L12 7.5 15.5 6 17 3zM7 9l2 4 4 2-4 2-2 4-2-4-4-2 4-2 2-4z"></path>
             </svg>
             汽車美容活動
+        </button>
+        <button onclick="switchSection(this, 'sec-hs15-compare')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 shrink-0 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            HS 1.5選車比較
+        </button>
+        <button onclick="switchSection(this, 'sec-hs20-compare')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 shrink-0 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            HS 2.0選車比較
+        </button>
+        <button onclick="switchSection(this, 'sec-hsphev-compare')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 shrink-0 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            HS PHEV選車比較
         </button>
         <button onclick="switchSection(this, 'sec-pitch')" class="nav-btn py-3.5 px-1 text-xs md:text-sm font-bold border-b-2 border-transparent text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200 shrink-0 flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -348,6 +417,722 @@
         </div>
 
         <div id="price-card-container" class="print-area"></div>
+    </div>
+
+    <!-- ================== Section 1B: HS 1.5 選車比較 ================== -->
+    <div id="sec-hs15-compare" class="section-panel hidden space-y-6">
+        <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-base font-extrabold text-mg-red">HS 1.5T 三車型選擇比較</span>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold mt-1">業務內部判斷用：車價、促案、配備與獎金點數一起看。</p>
+                </div>
+                <span class="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-2.5 py-1 rounded-md font-bold shrink-0">🔒 內部資訊</span>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div class="rounded-2xl border-2 border-mg-red bg-mg-red/5 dark:bg-mg-red/10 p-5 space-y-2">
+                    <span class="text-[11px] font-black text-mg-red tracking-widest">核心判斷</span>
+                    <h3 class="text-lg font-black">先分組，再看價差與獎金</h3>
+                    <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                        典藏 85.9 萬 vs 旗艦 89.9 萬，價差 4 萬。典藏加 3 萬是 88.9 萬 vs MAX 92.9 萬，價差 4 萬。不要只看車價，也要看促案內容與業務獎金點數。
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-4">
+                        <span class="text-[11px] font-black text-zinc-400 block mb-1">比較一：低價選</span>
+                        <b class="text-lg text-mg-red">85.9 萬</b>
+                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-1">典藏版</p>
+                    </div>
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-4">
+                        <span class="text-[11px] font-black text-zinc-400 block mb-1">比較一：價差 4 萬</span>
+                        <b class="text-lg text-mg-red">89.9 萬</b>
+                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-1">旗艦版，2.5 點</p>
+                    </div>
+                    <div class="rounded-2xl border-2 border-mg-red bg-mg-red/5 dark:bg-mg-red/10 p-4">
+                        <span class="text-[11px] font-black text-mg-red block mb-1">比較二：升級起點</span>
+                        <b class="text-lg text-mg-red">88.9 萬</b>
+                        <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 mt-1">典藏版 + PREMIUM 套件</p>
+                    </div>
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-4">
+                        <span class="text-[11px] font-black text-zinc-400 block mb-1">比較二：價差 4 萬</span>
+                        <b class="text-lg text-mg-red">92.9 萬</b>
+                        <p class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mt-1">MAX，3 點</p>
+                    </div>
+                </div>
+
+
+
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+                    <div class="px-5 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800">
+                        <span class="text-base font-black text-mg-red">現金買車：直接看車價與拿到什麼</span>
+                        <p class="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mt-1">看成交價、實拿內容、業務點數。</p>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="compare-table text-left font-bold">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                                <tr>
+                                    <th class="px-4 py-3 tight-cell">車型</th>
+                                    <th class="px-4 py-3 tight-cell">現金成交價</th>
+                                    <th class="px-4 py-3 tight-cell">同組價差</th>
+                                    <th class="px-4 py-3 diff-cell">實拿內容</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-mg-darkCard">
+                                <tr class="bg-zinc-50 dark:bg-zinc-800/50">
+                                    <td colspan="4" class="px-4 py-2 text-mg-red font-black">比較一：典藏版 vs 旗艦版</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">典藏版</b><span class="text-zinc-500 dark:text-zinc-400">HR390</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">85.9 萬</b><br><span class="text-zinc-500">93.9 萬折 8 萬</span></td>
+                                    <td class="px-4 py-4">比較起點</td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.5萬)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">旗艦版</b><span class="text-zinc-500 dark:text-zinc-400">HR389</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">89.9 萬</b><br><span class="text-zinc-500">93.9 萬折 4 萬</span></td>
+                                    <td class="px-4 py-4">多 <b class="text-mg-red text-base">4 萬</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.5萬)<br>2. <b>原廠配件金 8,000 元</b></td>
+                                </tr>
+                                <tr class="bg-zinc-50 dark:bg-zinc-800/50">
+                                    <td colspan="4" class="px-4 py-2 text-mg-red font-black">比較二：典藏版 + PREMIUM 套件 vs MAX版</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">典藏版<br>+ PREMIUM 套件</b><span class="text-zinc-500 dark:text-zinc-400">HR39A</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">88.9 萬</b><br><span class="text-zinc-500">典藏加 3 萬</span></td>
+                                    <td class="px-4 py-4">比較起點</td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.5萬)<br>2. <b>PREMIUM 專屬配備</b> (價值 5.2萬)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX版</b><span class="text-zinc-500 dark:text-zinc-400">HR38E</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">92.9 萬</b><br><span class="text-zinc-500">93.9 萬折 1 萬</span></td>
+                                    <td class="px-4 py-4">多 <b class="text-mg-red text-base">4 萬</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.5萬)<br>2. <b>PREMIUM 專屬配備</b> (價值 5.2萬)<br>3. <b>原廠配件金 10,000 元</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+                    <div class="px-5 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800">
+                        <span class="text-base font-black text-mg-red">分期買車：兩組比較與差異</span>
+                        <p class="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mt-1">低首付以「分期基準車價 - 2萬」計算，期數與利率相同就視為同一種方案。</p>
+                    </div>
+                    <div class="px-5 py-4 bg-mg-red/5 dark:bg-mg-red/10 border-b border-zinc-200 dark:border-zinc-800">
+                        <p class="text-xs font-black text-mg-red mb-2">共同分期方案</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] font-black text-zinc-800 dark:text-zinc-100">
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">1. 60 萬 30 期 0 利率 <span class="highlight-paren">(元大)</span></div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">2. 低首付 2 萬：貸款金額 = 車價 - 2 萬，72 期 2.79% <span class="highlight-paren">(TAC)</span></div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">3. 低月付 80 萬 1.99% <span class="highlight-paren">(元大)</span>，期數看下表</div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="compare-table text-left font-bold">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                                <tr>
+                                    <th class="px-4 py-3 tight-cell">車型</th>
+                                    <th class="px-4 py-3 tight-cell">分期基準車價</th>
+                                    <th class="px-4 py-3 tight-cell">同組價差</th>
+                                    <th class="px-4 py-3 tight-cell">低月付期數</th>
+                                    <th class="px-4 py-3 diff-cell">差異</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-mg-darkCard">
+                                <tr class="bg-zinc-50 dark:bg-zinc-800/50">
+                                    <td colspan="5" class="px-4 py-2 text-mg-red font-black">比較一：典藏版 vs 旗艦版</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">典藏版</b><span class="text-zinc-500 dark:text-zinc-400">HR390</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">85.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">比較起點</td>
+                                    <td class="px-4 py-4 tight-cell">60 期</td>
+                                    <td class="px-4 py-4 leading-relaxed"></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">旗艦版</b><span class="text-zinc-500 dark:text-zinc-400">HR389</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">89.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">多 <b class="text-mg-red">4萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">60 期</td>
+                                    <td class="px-4 py-4 leading-relaxed">1. 第五年延長保固 (價值 1.5萬)</td>
+                                </tr>
+                                <tr class="bg-zinc-50 dark:bg-zinc-800/50">
+                                    <td colspan="5" class="px-4 py-2 text-mg-red font-black">比較二：典藏版 + PREMIUM 套件 vs MAX版</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">典藏版<br>+ PREMIUM 套件</b><span class="text-zinc-500 dark:text-zinc-400">HR39A</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">88.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">比較起點</td>
+                                    <td class="px-4 py-4 tight-cell">60 期</td>
+                                    <td class="px-4 py-4 leading-relaxed">1. PREMIUM 專屬配備 (價值 5.2萬)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX版</b><span class="text-zinc-500 dark:text-zinc-400">HR38E</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">92.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">多 <b class="text-mg-red">4萬</b></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red">72 期</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. PREMIUM 專屬配備 (價值 5.2萬)<br>2. 第五年延長保固 (價值 1.5萬)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-5 space-y-2">
+                        <span class="text-[11px] font-black text-zinc-400">預算優先</span>
+                        <h4 class="text-base font-black">選典藏版</h4>
+                        <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">85.9 萬，價格最低；分期要提醒保固二選一。</p>
+                    </div>
+                    <div class="rounded-2xl border-2 border-mg-red bg-mg-red/5 dark:bg-mg-red/10 p-5 space-y-2">
+                        <span class="text-[11px] font-black text-mg-red">CP 值優先</span>
+                        <h4 class="text-base font-black">典藏加 3 萬升級</h4>
+                        <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">88.9 萬，拿 5.2 萬配備；現金 CP 值最佳。</p>
+                    </div>
+                    <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/40 p-5 space-y-2">
+                        <span class="text-[11px] font-black text-zinc-400">促案完整</span>
+                        <h4 class="text-base font-black">選旗艦或 MAX</h4>
+                        <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">旗艦 2.5 點、MAX 3 點；業務獎金較有利。</p>
+                    </div>
+                </div>
+
+                <div class="rounded-xl border border-amber-200 dark:border-amber-900/50 bg-amber-50 dark:bg-amber-950/20 p-4 text-xs font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                    <b class="text-amber-800 dark:text-amber-300 block mb-1">業務溝通口徑</b>
+                    先問現金或分期。現金看成交價、配備、配件金；分期先講清楚典藏版是分期 / 第五年延長保固二選一。業務內部再看點數差異。
+                </div>
+
+                <details class="no-print group rounded-2xl border-2 border-dashed border-amber-300 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/10 shadow-inner overflow-hidden">
+                    <summary class="list-none cursor-pointer px-5 py-4 flex items-center justify-between gap-3 text-amber-800 dark:text-amber-400 font-extrabold text-xs tracking-wider uppercase select-none">
+                        <span class="flex items-center gap-2">
+                            <span class="text-base">🔒</span>
+                            <span>業務獎金差異（內部資料）</span>
+                        </span>
+                        <span class="text-[10px] bg-amber-100 dark:bg-amber-900/40 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-800 group-open:hidden">點擊展開</span>
+                        <span class="hidden text-[10px] bg-amber-100 dark:bg-amber-900/40 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-800 group-open:inline">收合</span>
+                    </summary>
+                    <div class="p-5 space-y-4 border-t border-amber-200 dark:border-amber-900/50">
+                    <div>
+                        <span class="text-[11px] font-black text-amber-700 dark:text-amber-300 tracking-widest">業務獎金差異（內部資料）</span>
+                        <h3 class="text-base font-black mt-1">先看當月台數基數，再看車型點數</h3>
+                        <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 mt-1 leading-relaxed">
+                            計算方式：車型點數 x 當月領牌台數基數。典藏、旗艦、MAX 都有機會看加碼，但金額與條件不同。
+                        </p>
+                    </div>
+                    <div class="overflow-x-auto w-fit max-w-full rounded-xl border border-amber-200 dark:border-amber-900/50">
+                        <table class="no-wrap-table bonus-table text-center font-bold bg-white dark:bg-mg-darkCard">
+                            <thead class="bg-zinc-900 text-white">
+                                <tr>
+                                    <th class="px-3 py-2">全車系台數</th>
+                                    <th class="px-3 py-2">1</th>
+                                    <th class="px-3 py-2">2-3</th>
+                                    <th class="px-3 py-2">4-5</th>
+                                    <th class="px-3 py-2">6</th>
+                                    <th class="px-3 py-2">7-8</th>
+                                    <th class="px-3 py-2">9-10</th>
+                                    <th class="px-3 py-2">>=11</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-3 py-2 text-left">基數</td>
+                                    <td class="px-3 py-2">$1,000</td>
+                                    <td class="px-3 py-2">$1,300</td>
+                                    <td class="px-3 py-2">$1,500</td>
+                                    <td class="px-3 py-2">$1,800</td>
+                                    <td class="px-3 py-2">$1,900</td>
+                                    <td class="px-3 py-2">$2,000</td>
+                                    <td class="px-3 py-2">$2,100</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="overflow-x-auto w-fit max-w-full rounded-xl border border-amber-300 dark:border-amber-800">
+                        <table class="no-wrap-table bonus-table text-left font-bold bg-white dark:bg-mg-darkCard">
+                            <thead class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200">
+                                <tr>
+                                    <th class="px-4 py-3">常見領牌台數</th>
+                                    <th class="px-4 py-3 text-right">典藏 1.5 點</th>
+                                    <th class="px-4 py-3 text-right">旗艦 2.5 點</th>
+                                    <th class="px-4 py-3 text-right">MAX 3 點</th>
+                                    <th class="px-4 py-3">差異重點</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-amber-100 dark:divide-amber-900/50">
+                                <tr>
+                                    <td class="px-4 py-3"><b>1 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,000</span></td>
+                                    <td class="px-4 py-3 text-right">$1,500</td>
+                                    <td class="px-4 py-3 text-right">$2,500</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$3,000</td>
+                                    <td class="px-4 py-3 leading-relaxed">旗艦比典藏多 $1,000；MAX 比旗艦多 $500。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3"><b>2-3 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,300</span></td>
+                                    <td class="px-4 py-3 text-right">$1,950</td>
+                                    <td class="px-4 py-3 text-right">$3,250</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$3,900</td>
+                                    <td class="px-4 py-3 leading-relaxed">旗艦比典藏多 $1,300；MAX 比旗艦多 $650。</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-3"><b>4-5 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,500</span></td>
+                                    <td class="px-4 py-3 text-right">$2,250</td>
+                                    <td class="px-4 py-3 text-right">$3,750</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$4,500</td>
+                                    <td class="px-4 py-3 leading-relaxed">旗艦比典藏多 $1,500；MAX 比旗艦多 $750。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="overflow-x-auto w-fit max-w-full rounded-xl border border-amber-300 dark:border-amber-800">
+                        <table class="no-wrap-table bonus-table text-left font-bold bg-white dark:bg-mg-darkCard">
+                            <thead class="bg-zinc-900 text-white">
+                                <tr>
+                                    <th class="px-4 py-3">見台獎 / 加碼 A</th>
+                                    <th class="px-4 py-3">適用車型</th>
+                                    <th class="px-4 py-3 text-right">金額</th>
+                                    <th class="px-4 py-3">台數門檻</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-amber-100 dark:divide-amber-900/50">
+                                <tr>
+                                    <td class="px-4 py-3 font-black text-mg-red">指定車型加碼</td>
+                                    <td class="px-4 py-3">HS 旗艦 / MAX</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$2,500 / 台</td>
+                                    <td class="px-4 py-3">未達 2 台不發；2 台 50%；3 台以上 100%。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-black text-mg-red">典藏新增加碼</td>
+                                    <td class="px-4 py-3">HS 典藏</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$1,500 / 台</td>
+                                    <td class="px-4 py-3">配件金達 $16,000；同台數門檻。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="overflow-x-auto w-fit max-w-full rounded-xl border border-amber-200 dark:border-amber-900/50">
+                        <table class="no-wrap-table bonus-table text-left font-bold bg-white dark:bg-mg-darkCard">
+                            <thead class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200">
+                                <tr>
+                                    <th class="px-4 py-3">車型</th>
+                                    <th class="px-4 py-3 text-center">點數</th>
+                                    <th class="px-4 py-3">獎金算法</th>
+                                    <th class="px-4 py-3">加碼提醒</th>
+                                    <th class="px-4 py-3">判斷</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-amber-100 dark:divide-amber-900/50">
+                                <tr>
+                                    <td class="px-4 py-3"><b class="text-mg-red">典藏版</b><span class="block text-zinc-500 dark:text-zinc-400">HR390</span></td>
+                                    <td class="px-4 py-3 text-center text-mg-red font-black">1.5 點</td>
+                                    <td class="px-4 py-3">1.5 x 基數</td>
+                                    <td class="px-4 py-3">符合條件可另看典藏加碼 $1,500 / 台。</td>
+                                    <td class="px-4 py-3 leading-relaxed">價格好談，且本月有新增見台加碼。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3"><b class="text-mg-red">旗艦版</b><span class="block text-zinc-500 dark:text-zinc-400">HR389</span></td>
+                                    <td class="px-4 py-3 text-center text-mg-red font-black">2.5 點</td>
+                                    <td class="px-4 py-3">2.5 x 基數</td>
+                                    <td class="px-4 py-3">符合門檻可另看見台獎 $2,500 / 台。</td>
+                                    <td class="px-4 py-3 leading-relaxed">客戶可接受價差時，可優先往旗艦溝通。</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-3"><b class="text-mg-red">MAX版</b><span class="block text-zinc-500 dark:text-zinc-400">HR38E</span></td>
+                                    <td class="px-4 py-3 text-center text-mg-red font-black">3 點</td>
+                                    <td class="px-4 py-3">3 x 基數</td>
+                                    <td class="px-4 py-3">點數最高；符合門檻可另看見台獎 $2,500 / 台。</td>
+                                    <td class="px-4 py-3 leading-relaxed">配備、促案、點數最完整。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-amber-200 dark:border-amber-900/50 p-4 text-xs font-bold text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                        <b class="text-amber-800 dark:text-amber-300 block mb-1">業務提醒</b>
+                        先確認業代當月全車系已領牌台數，找出基數，再乘上該車型點數。典藏、旗艦、MAX 都要再確認是否符合見台加碼門檻；典藏加碼金額與旗艦 / MAX 不同，請勿混用。
+                    </div>
+                
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================== Section 1C: HS 2.0 選車比較 ================== -->
+    <div id="sec-hs20-compare" class="section-panel hidden space-y-6">
+        <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-base font-extrabold text-mg-red">HS 2.0T 四驅選車比較</span>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold mt-1">業務內部判斷用：典藏、MAX 折現版、MAX 套件版分開看。</p>
+                </div>
+                <span class="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-2.5 py-1 rounded-md font-bold shrink-0">🔒 內部資訊</span>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div class="rounded-2xl border-2 border-mg-red bg-mg-red/5 dark:bg-mg-red/10 p-5 space-y-2">
+                    <span class="text-[11px] font-black text-mg-red tracking-widest">核心判斷</span>
+                    <h3 class="text-lg font-black">先分三台：低價、折現、配備</h3>
+                    <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                        典藏版 99.9 萬是最低入手價，但不提供加價升級 7.0 萬套件；MAX 折現版 101.9 萬，多 2 萬但點數與加碼較有利；MAX 套件版 106.9 萬，主打 7.0 萬配備。
+                    </p>
+                </div>
+
+
+
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+                    <div class="px-5 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800">
+                        <span class="text-base font-black text-mg-red">現金買車：車價與實拿差異</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="compare-table text-left font-bold">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                                <tr>
+                                    <th class="px-4 py-3 tight-cell">車型</th>
+                                    <th class="px-4 py-3 tight-cell">現金成交價</th>
+                                    <th class="px-4 py-3 tight-cell">同組價差</th>
+                                    <th class="px-4 py-3 diff-cell">實拿內容</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-mg-darkCard">
+                                <tr class="bg-zinc-50 dark:bg-zinc-800/50">
+                                    <td colspan="4" class="px-4 py-2 text-mg-red font-black">比較一：典藏版 vs MAX 折現版</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">典藏版</b><span class="text-zinc-500 dark:text-zinc-400">HR500 / HR590</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">99.9 萬</b><br><span class="text-zinc-500">109.9 萬折 10 萬</span></td>
+                                    <td class="px-4 py-4">比較起點</td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.6萬)<br><b class="text-mg-red">不提供加價升級 7.0 萬套件</b></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX 折現版</b><span class="text-zinc-500 dark:text-zinc-400">HR501 / HR506</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">101.9 萬</b><br><span class="text-zinc-500">109.9 萬折 8 萬</span></td>
+                                    <td class="px-4 py-4">多 <b class="text-mg-red text-base">2 萬</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.6萬)<br>2. <b>原廠配件金 10,000 元</b></td>
+                                </tr>
+                                <tr class="bg-zinc-50 dark:bg-zinc-800/50">
+                                    <td colspan="4" class="px-4 py-2 text-mg-red font-black">比較二：MAX 折現版 vs MAX 套件版</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX 折現版</b><span class="text-zinc-500 dark:text-zinc-400">HR501</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">101.9 萬</b></td>
+                                    <td class="px-4 py-4">比較起點</td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.6萬)<br>2. <b>原廠配件金 10,000 元</b></td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX 套件版</b><span class="text-zinc-500 dark:text-zinc-400">HR506</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">106.9 萬</b></td>
+                                    <td class="px-4 py-4">多 <b class="text-mg-red text-base">5 萬</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.6萬)<br>2. <b>MG 專屬配備</b> (價值 7.0萬)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+                    <div class="px-5 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800">
+                        <span class="text-base font-black text-mg-red">分期買車：共同方案與差異</span>
+                        <p class="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mt-1">低首付以「分期基準車價 - 2萬」計算，期數與利率相同就視為同一種方案。</p>
+                    </div>
+                    <div class="px-5 py-4 bg-mg-red/5 dark:bg-mg-red/10 border-b border-zinc-200 dark:border-zinc-800">
+                        <p class="text-xs font-black text-mg-red mb-2">共同分期方案</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] font-black text-zinc-800 dark:text-zinc-100">
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">1. 60 萬 30 期 0 利率 <span class="highlight-paren">(元大)</span></div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">2. 低首付 2 萬：貸款金額 = 車價 - 2 萬，72 期 2.79% <span class="highlight-paren">(TAC)</span></div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">3. 低月付 88 萬 72 期 1.99% <span class="highlight-paren">(元大)</span></div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="compare-table text-left font-bold">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                                <tr>
+                                    <th class="px-4 py-3 tight-cell">車型</th>
+                                    <th class="px-4 py-3 tight-cell">分期基準車價</th>
+                                    <th class="px-4 py-3 tight-cell">低首付貸款</th>
+                                    <th class="px-4 py-3 tight-cell">同組價差</th>
+                                    <th class="px-4 py-3 diff-cell">差異</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-mg-darkCard">
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">典藏版</b><span class="text-zinc-500 dark:text-zinc-400">HR500 / HR590</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">99.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">97.9 萬</td>
+                                    <td class="px-4 py-4 tight-cell">比較起點</td>
+                                    <td class="px-4 py-4 leading-relaxed"></td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX 折現版</b><span class="text-zinc-500 dark:text-zinc-400">HR501</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">101.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">99.9 萬</td>
+                                    <td class="px-4 py-4 tight-cell">多 <b class="text-mg-red">2萬</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. 第五年延長保固 (價值 1.6萬)</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX 套件版</b><span class="text-zinc-500 dark:text-zinc-400">HR506</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">106.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">104.9 萬</td>
+                                    <td class="px-4 py-4 tight-cell">比折現版多 <b class="text-mg-red">5萬</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. MG 專屬配備 (價值 7.0萬)<br>2. 第五年延長保固 (價值 1.6萬)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <details class="no-print group rounded-2xl border-2 border-dashed border-amber-300 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/10 shadow-inner overflow-hidden">
+                    <summary class="list-none cursor-pointer px-5 py-4 flex items-center justify-between gap-3 text-amber-800 dark:text-amber-400 font-extrabold text-xs tracking-wider uppercase select-none">
+                        <span class="flex items-center gap-2">
+                            <span class="text-base">🔒</span>
+                            <span>業務獎金差異（內部資料）</span>
+                        </span>
+                        <span class="text-[10px] bg-amber-100 dark:bg-amber-900/40 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-800 group-open:hidden">點擊展開</span>
+                        <span class="hidden text-[10px] bg-amber-100 dark:bg-amber-900/40 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-800 group-open:inline">收合</span>
+                    </summary>
+                    <div class="p-5 space-y-4 border-t border-amber-200 dark:border-amber-900/50">
+                    <div>
+                        <span class="text-[11px] font-black text-amber-700 dark:text-amber-300 tracking-widest">業務獎金差異（內部資料）</span>
+                        <h3 class="text-base font-black mt-1">2.0 典藏 2 點；MAX 3.5 點</h3>
+                    </div>
+                    <div class="overflow-x-auto w-fit max-w-full rounded-xl border border-amber-300 dark:border-amber-800">
+                        <table class="no-wrap-table bonus-table text-left font-bold bg-white dark:bg-mg-darkCard">
+                            <thead class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200">
+                                <tr>
+                                    <th class="px-4 py-3">常見領牌台數</th>
+                                    <th class="px-4 py-3 text-right">典藏 2 點</th>
+                                    <th class="px-4 py-3 text-right">MAX 3.5 點</th>
+                                    <th class="px-4 py-3">差異重點</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-amber-100 dark:divide-amber-900/50">
+                                <tr>
+                                    <td class="px-4 py-3"><b>1 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,000</span></td>
+                                    <td class="px-4 py-3 text-right">$2,000</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$3,500</td>
+                                    <td class="px-4 py-3">MAX 多 $1,500。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3"><b>2-3 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,300</span></td>
+                                    <td class="px-4 py-3 text-right">$2,600</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$4,550</td>
+                                    <td class="px-4 py-3">MAX 多 $1,950。</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-3"><b>4-5 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,500</span></td>
+                                    <td class="px-4 py-3 text-right">$3,000</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$5,250</td>
+                                    <td class="px-4 py-3">MAX 多 $2,250。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="overflow-x-auto w-fit max-w-full rounded-xl border border-amber-200 dark:border-amber-900/50">
+                        <table class="no-wrap-table bonus-table text-left font-bold bg-white dark:bg-mg-darkCard">
+                            <thead class="bg-zinc-900 text-white">
+                                <tr>
+                                    <th class="px-4 py-3">見台加碼</th>
+                                    <th class="px-4 py-3">適用車型</th>
+                                    <th class="px-4 py-3 text-right">金額</th>
+                                    <th class="px-4 py-3">門檻</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-amber-100 dark:divide-amber-900/50">
+                                <tr>
+                                    <td class="px-4 py-3 font-black text-mg-red">典藏新增加碼</td>
+                                    <td class="px-4 py-3">HS 2.0 典藏</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$1,500 / 台</td>
+                                    <td class="px-4 py-3">配件金達 $16,000；同台數門檻。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-black text-mg-red">指定車型加碼</td>
+                                    <td class="px-4 py-3">HS 2.0 MAX</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$2,500 / 台</td>
+                                    <td class="px-4 py-3">未達 2 台不發；2 台 50%；3 台以上 100%。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================== Section 1D: HS PHEV 選車比較 ================== -->
+    <div id="sec-hsphev-compare" class="section-panel hidden space-y-6">
+        <div class="bg-white dark:bg-mg-darkCard rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800 flex flex-col md:flex-row md:items-center justify-between gap-2">
+                <div>
+                    <span class="text-base font-extrabold text-mg-red">HS PHEV 選車比較</span>
+                    <p class="text-[11px] text-zinc-500 dark:text-zinc-400 font-bold mt-1">業務內部判斷用：典藏版與 MAX版促案不同，分開看現金與分期。</p>
+                </div>
+                <span class="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 px-2.5 py-1 rounded-md font-bold shrink-0">🔒 內部資訊</span>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div class="rounded-2xl border-2 border-mg-red bg-mg-red/5 dark:bg-mg-red/10 p-5 space-y-2">
+                    <span class="text-[11px] font-black text-mg-red tracking-widest">核心判斷</span>
+                    <h3 class="text-lg font-black">典藏版看入手價，MAX版看配備與獎金</h3>
+                    <p class="text-xs font-semibold text-zinc-600 dark:text-zinc-300 leading-relaxed">
+                        典藏版 116.9 萬，免加價升級 7.2 萬套件；MAX版 121.9 萬，價差 5 萬。MAX版點數較完整，且 PHEV MAX 見台加碼較高。
+                    </p>
+                </div>
+
+
+
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+                    <div class="px-5 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800">
+                        <span class="text-base font-black text-mg-red">現金買車：車價與實拿差異</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="compare-table text-left font-bold">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                                <tr>
+                                    <th class="px-4 py-3 tight-cell">車型</th>
+                                    <th class="px-4 py-3 tight-cell">現金成交價</th>
+                                    <th class="px-4 py-3 tight-cell">同組價差</th>
+                                    <th class="px-4 py-3 diff-cell">實拿內容</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-mg-darkCard">
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">典藏版</b><span class="text-zinc-500 dark:text-zinc-400">HR700 / 701 / 790 / 791</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">116.9 萬</b><br><span class="text-zinc-500">124.9 萬折 8 萬</span></td>
+                                    <td class="px-4 py-4">比較起點</td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.8萬)<br>2. <b>MG 專屬配備</b> (價值 7.2萬，免加價)</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX版</b><span class="text-zinc-500 dark:text-zinc-400">HR710 / 711</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">121.9 萬</b><br><span class="text-zinc-500">124.9 萬折 3 萬</span></td>
+                                    <td class="px-4 py-4">多 <b class="text-mg-red text-base">5 萬</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. <b>第五年延長保固</b> (價值 1.8萬)<br>2. <b>MG 專屬配備</b> (價值 7.2萬)<br>3. <b>原廠配件金 10,000 元</b> 或 <b>美腿機</b> (價值 2.28萬～2.38萬)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+                    <div class="px-5 py-4 bg-zinc-50 dark:bg-zinc-800/40 border-b border-zinc-200 dark:border-zinc-800">
+                        <span class="text-base font-black text-mg-red">分期買車：共同方案與差異</span>
+                        <p class="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 mt-1">低首付以「分期基準車價 - 2萬」計算，期數與利率相同就視為同一種方案。</p>
+                    </div>
+                    <div class="px-5 py-4 bg-mg-red/5 dark:bg-mg-red/10 border-b border-zinc-200 dark:border-zinc-800">
+                        <p class="text-xs font-black text-mg-red mb-2">共同分期方案</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] font-black text-zinc-800 dark:text-zinc-100">
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">1. 60 萬 30 期 0 利率 <span class="highlight-paren">(元大)</span></div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">2. 低首付 2 萬：貸款金額 = 車價 - 2 萬，72 期 2.79% <span class="highlight-paren">(TAC)</span></div>
+                            <div class="rounded-xl bg-white dark:bg-mg-darkCard border border-mg-red/15 px-3 py-2">3. 低月付 100 萬 72 期 1.99% <span class="highlight-paren">(元大)</span></div>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="compare-table text-left font-bold">
+                            <thead class="bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400">
+                                <tr>
+                                    <th class="px-4 py-3 tight-cell">車型</th>
+                                    <th class="px-4 py-3 tight-cell">分期基準車價</th>
+                                    <th class="px-4 py-3 tight-cell">低首付貸款</th>
+                                    <th class="px-4 py-3 tight-cell">同組價差</th>
+                                    <th class="px-4 py-3 diff-cell">差異</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-mg-darkCard">
+                                <tr>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">典藏版</b><span class="text-zinc-500 dark:text-zinc-400">HR700 / 701 / 790 / 791</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">116.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">114.9 萬</td>
+                                    <td class="px-4 py-4 tight-cell">比較起點</td>
+                                    <td class="px-4 py-4 leading-relaxed">1. MG 專屬配備 (價值 7.2萬)</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red block text-sm">MAX版</b><span class="text-zinc-500 dark:text-zinc-400">HR710 / 711</span></td>
+                                    <td class="px-4 py-4 tight-cell"><b class="text-mg-red price-main">121.9 萬</b></td>
+                                    <td class="px-4 py-4 tight-cell">119.9 萬</td>
+                                    <td class="px-4 py-4 tight-cell">多 <b class="text-mg-red">5萬</b></td>
+                                    <td class="px-4 py-4 leading-relaxed">1. MG 專屬配備 (價值 7.2萬)<br>2. 第五年延長保固 (價值 1.8萬)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <details class="no-print group rounded-2xl border-2 border-dashed border-amber-300 dark:border-amber-900/60 bg-amber-50/50 dark:bg-amber-950/10 shadow-inner overflow-hidden">
+                    <summary class="list-none cursor-pointer px-5 py-4 flex items-center justify-between gap-3 text-amber-800 dark:text-amber-400 font-extrabold text-xs tracking-wider uppercase select-none">
+                        <span class="flex items-center gap-2">
+                            <span class="text-base">🔒</span>
+                            <span>業務獎金差異（內部資料）</span>
+                        </span>
+                        <span class="text-[10px] bg-amber-100 dark:bg-amber-900/40 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-800 group-open:hidden">點擊展開</span>
+                        <span class="hidden text-[10px] bg-amber-100 dark:bg-amber-900/40 px-2 py-1 rounded-full border border-amber-200 dark:border-amber-800 group-open:inline">收合</span>
+                    </summary>
+                    <div class="p-5 space-y-4 border-t border-amber-200 dark:border-amber-900/50">
+                    <div>
+                        <span class="text-[11px] font-black text-amber-700 dark:text-amber-300 tracking-widest">業務獎金差異（內部資料）</span>
+                        <h3 class="text-base font-black mt-1">PHEV 典藏 2.5 點；MAX 4 點</h3>
+                    </div>
+                    <div class="overflow-x-auto w-fit max-w-full rounded-xl border border-amber-300 dark:border-amber-800">
+                        <table class="no-wrap-table bonus-table text-left font-bold bg-white dark:bg-mg-darkCard">
+                            <thead class="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200">
+                                <tr>
+                                    <th class="px-4 py-3">常見領牌台數</th>
+                                    <th class="px-4 py-3 text-right">典藏 2.5 點</th>
+                                    <th class="px-4 py-3 text-right">MAX 4 點</th>
+                                    <th class="px-4 py-3">差異重點</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-amber-100 dark:divide-amber-900/50">
+                                <tr>
+                                    <td class="px-4 py-3"><b>1 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,000</span></td>
+                                    <td class="px-4 py-3 text-right">$2,500</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$4,000</td>
+                                    <td class="px-4 py-3">MAX 多 $1,500。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3"><b>2-3 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,300</span></td>
+                                    <td class="px-4 py-3 text-right">$3,250</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$5,200</td>
+                                    <td class="px-4 py-3">MAX 多 $1,950。</td>
+                                </tr>
+                                <tr class="bg-mg-red/5 dark:bg-mg-red/10">
+                                    <td class="px-4 py-3"><b>4-5 台</b><span class="block text-zinc-500 dark:text-zinc-400">基數 $1,500</span></td>
+                                    <td class="px-4 py-3 text-right">$3,750</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$6,000</td>
+                                    <td class="px-4 py-3">MAX 多 $2,250。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="overflow-x-auto w-fit max-w-full rounded-xl border border-amber-200 dark:border-amber-900/50">
+                        <table class="no-wrap-table bonus-table text-left font-bold bg-white dark:bg-mg-darkCard">
+                            <thead class="bg-zinc-900 text-white">
+                                <tr>
+                                    <th class="px-4 py-3">見台加碼</th>
+                                    <th class="px-4 py-3">適用車型</th>
+                                    <th class="px-4 py-3 text-right">金額</th>
+                                    <th class="px-4 py-3">門檻</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-amber-100 dark:divide-amber-900/50">
+                                <tr>
+                                    <td class="px-4 py-3 font-black text-mg-red">典藏新增加碼</td>
+                                    <td class="px-4 py-3">PHEV 典藏</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$1,500 / 台</td>
+                                    <td class="px-4 py-3">配件金達 $16,000；同台數門檻。</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-3 font-black text-mg-red">見台發加碼</td>
+                                    <td class="px-4 py-3">PHEV MAX</td>
+                                    <td class="px-4 py-3 text-right text-mg-red font-black">$3,000 / 台</td>
+                                    <td class="px-4 py-3">未達 2 台不發；2 台 50%；3 台以上 100%。</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                
+                    </div>
+                </details>
+            </div>
+        </div>
     </div>
 
     <!-- ================== Section 2: 貸款計算機 ================== -->
@@ -915,7 +1700,7 @@
                         核心觀念：買末代神車配備滿、除錯完最穩定，且現行價格與購車金最高，新車上市必漲且無折價空間。
                     </div>
                     <p class="text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed font-medium">
-                        「大哥，我完全理解您想看最新車型的心情。但老實說，買車一定要買在 <span class="text-mg-gold font-bold bg-mg-gold/5 dark:bg-mg-gold/15 px-1 rounded">配備最滿、問題最少、價格最殺的末代巔峰期</span>。現行的 HS 經過市場百萬里程考驗，小毛病早就除錯光了，非常穩定。現在入手，我們 7 月不僅給您心動購車金，還獨家贈送 <span class="font-bold text-mg-red">『第五年延長保固（由原 4 年 / 12 萬公里升級至 5 年 / 14 萬公里，價值 1.5 萬）』</span>。未來如果大改款引進，定價很可能大幅調整，而且首批新車通常優惠空間有限，交期、配備與市場回饋也都需要時間觀察。現在現車還有經典的 <b>電掣白</b>，配備成熟又最劃算，不拿這波最頂級的優惠實在太劃不來了！」
+                        「大哥，我完全理解您想看最新車型的心情。但老實說，買車一定要買在 <span class="text-mg-gold font-bold bg-mg-gold/5 dark:bg-mg-gold/15 px-1 rounded">配備最滿、問題最少、價格最殺的末代巔峰期</span>。現行的 HS 經過市場百萬里程考驗，小毛病早就除錯光了，非常穩定。現在入手，我們 7 月不僅給您心動購車金，還獨家贈送 <span class="font-bold text-mg-red">『第五年延長保固（由原 4 年 / 12 萬公里升級至 5 年 / 14 萬公里，價值 1.5萬）』</span>。未來如果大改款引進，定價很可能大幅調整，而且首批新車通常優惠空間有限，交期、配備與市場回饋也都需要時間觀察。現在現車還有經典的 <b>電掣白</b>，配備成熟又最劃算，不拿這波最頂級的優惠實在太劃不來了！」
                     </p>
                 </div>
             </div>
@@ -979,11 +1764,11 @@
         'hs-15-flag': { 
             name: 'HS 1.5T 旗艦版 (HR389) [準26年式]', original: 93.9, heart: 4, tag: '7月續走熱銷', 
             discounts: [
-                { title: '【重要提醒】計程車/多元計程車/租賃車不適用第五年延長保固', perks: ['【經典現車】全台現車庫存僅剩：<span class="text-mg-red font-extrabold underline">電掣白</span> (其餘車色已全數完售，現車可即時交車)', '【推薦回饋】MG 車主推薦購車完成領牌，推薦人獲贈 <b>30 萬點紅利 (價值 3,000 元)</b>']},
+                { title: '【重要提醒】計程車/多元計程車/租賃車不適用第五年延長保固', perks: ['【經典現車】全台現車庫存僅剩：<span class="text-mg-red font-extrabold underline">電掣白</span> (其餘車色已全數完售，現車可即時交車)', '【推薦回饋】MG 車主推薦購車完成領牌，推薦人獲贈 <b>30 萬點紅利 (價值 0.3萬)</b>']},
                 { title: '【內部銷售提示】年份銷售說明口徑', perks: ['⚠️ <b class="text-mg-red">銷售口徑注意</b>：本月 HS 全車系所稱之「準26年式」，白話定義皆為 <b>2025 年生產之全新車款</b>。對客戶報價及介紹時，請統一使用「準26年式」尊貴包裝，切勿主動向客提及 2025 年生產以避免抗拒。']},
                 { title: '安全優勢、TNCAP 五星最高級別', perks: ['HS 1.5 已獲得 <b>TNCAP 五星最高級別安全認證</b>，可作為家庭客、安全配備比較客的重要成交主軸。相較部分同級競品公開測試僅 2 至 3 星，HS 1.5 可直接用「最高五顆星」建立安全信任。']},
                 { title: '優惠一、完成領牌即享', perks: ['「準26年式專屬心動購車金 4 萬」 (已於報價表抵扣，成交價為 89.9 萬)']},
-                { title: '優惠二、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.5 萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠二、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.5萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
                 { title: '優惠四、輕鬆入主方案 (二選一)', plans: [
                     { v: '方案一、(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 87.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 80 萬 60 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
                     { v: '方案二、原廠配件金：直接折算原廠配件金 8,000 元', cash: true }
@@ -991,14 +1776,14 @@
             ]
         },
         'hs-15-max': { 
-            name: 'HS 1.5T MAX 升級版 (HR38E) [準26年式]', original: 93.9, heart: 1, tag: '豪華配備攻頂', 
+            name: 'HS 1.5T MAX版 (HR38E) [準26年式]', original: 93.9, heart: 1, tag: '豪華配備攻頂', 
             discounts: [
-                { title: '【重要提醒】計程車/多元計程車/租賃車不適用第五年延長保固', perks: ['【車主推薦】MG 車主推薦親友購車完成領牌，推薦人獲贈 <b>30 萬點紅利 (價值 3,000 元)</b>']},
+                { title: '【重要提醒】計程車/多元計程車/租賃車不適用第五年延長保固', perks: ['【車主推薦】MG 車主推薦親友購車完成領牌，推薦人獲贈 <b>30 萬點紅利 (價值 0.3萬)</b>']},
                 { title: '【內部銷售提示】年份銷售說明口徑', perks: ['⚠️ <b class="text-mg-red">銷售口徑注意</b>：本月 HS 全車系所稱之「準26年式」，白話定義皆為 <b>2025 年生產之全新車款</b>。']},
                 { title: '安全優勢、TNCAP 五星最高級別', perks: ['HS 1.5 已獲得 <b>TNCAP 五星最高級別安全認證</b>，可作為家庭客、安全配備比較客的重要成交主軸。相較部分同級競品公開測試僅 2 至 3 星，HS 1.5 可直接用「最高五顆星」建立安全信任。']},
-                { title: '優惠一、升級 MG 專屬配備項目 (價值 5.2 萬)', perks: ['包含：無邊框電子後視鏡暨行車紀錄器、風格側裙、全車座艙氣氛燈、專屬迎賓踏板、引擎室結構桿、尾門安全照明燈 (總價值 52,000 元)']},
+                { title: '優惠一、升級 MG 專屬配備項目 (價值 5.2萬)', perks: ['包含：無邊框電子後視鏡暨行車紀錄器、風格側裙、全車座艙氣氛燈、專屬迎賓踏板、引擎室結構桿、尾門安全照明燈 (總價值 5.2萬)']},
                 { title: '優惠二、完成領牌即享', perks: ['「準26年式專屬心動購車金 1 萬」 (已於報價表抵扣，成交價為 92.9 萬)']},
-                { title: '優惠四、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.5 萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠四、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.5萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
                 { title: '優惠五、輕鬆入主分期方案 (二選一)', plans: [
                     { v: '方案一、(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 90.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 80 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
                     { v: '方案二、原廠配件金：直接折算原廠配件金 10,000 元', cash: true }
@@ -1008,13 +1793,13 @@
         'hs-15-classic': { 
             name: 'HS 1.5T 限量典藏版 (HR390) [準26年式]', original: 93.9, heart: 8, tag: '限量典藏心動價', 
             discounts: [
-                { title: '【內部銷售提示】合約車型與升級方案', perks: ['基本限量典藏版請以 <b>HR390</b> 簽署合約，對外溝通為原價 <b>939,000 元</b>，折扣後成交價 <b>859,000 元</b>。', '<b>車源溝通：</b>1.5 典藏版車源等同 1.5 旗艦版；若客戶加價 <b>30,000 元</b> 升級 PREMIUM 配備，即可溝通為 1.5 MAX 升級版內容，請以 <b>HR39A</b> 簽署合約，折扣後售價 <b>889,000 元</b>。']},
+                { title: '【內部銷售提示】合約車型與升級方案', perks: ['基本限量典藏版請以 <b>HR390</b> 簽署合約，對外溝通為原價 <b>939,000 元</b>，折扣後成交價 <b>859,000 元</b>。', '<b>車源溝通：</b>1.5 典藏版車源等同 1.5 旗艦版；若客戶加價 <b>30,000 元</b> 升級 PREMIUM 專屬配備，即可溝通為 1.5 MAX 升級版內容，請以 <b>HR39A</b> 簽署合約，折扣後售價 <b>889,000 元</b>。']},
                 { title: '優惠一、限量典藏版心動購車金', perks: ['原車價 <b>939,000 元</b>，本月折抵 <b>80,000 元</b>，折扣後成交價 <b>859,000 元</b>。']},
                 { title: '優惠二、輕鬆入主好康方案 (二選一)', plans: [
                     { v: '方案一、(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 83.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 80 萬 60 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
-                    { v: '方案二、第五年延長保固 (價值 15,000 元)', cash: true }
+                    { v: '方案二、第五年延長保固 (價值 1.5萬)', cash: true }
                 ]},
-                { title: '優惠三、限時升級 PREMIUM 優惠價：3 萬', perks: ['升級內容：無邊框電子後視鏡暨行車紀錄器、風格側裙、全車座艙氣氛燈、專屬迎賓踏板、引擎室結構桿、尾門安全照明燈 (總價值 5.2 萬)。', '選擇升級此優惠者，請以 HR39A 簽署合約，折扣後售價 889,000 元。']}
+                { title: '優惠三、限時升級 PREMIUM 專屬配備優惠價：3 萬', perks: ['升級內容：無邊框電子後視鏡暨行車紀錄器、風格側裙、全車座艙氣氛燈、專屬迎賓踏板、引擎室結構桿、尾門安全照明燈 (總價值 5.2萬)。', '選擇升級此優惠者，請以 HR39A 簽署合約，折扣後售價 889,000 元。']}
             ]
         },
         'hs-20-max-pkg': { 
@@ -1023,7 +1808,7 @@
                 { title: '【內部提示】車型與配備規格公告', perks: ['【車型代號】HR506', '【包含套件】標配原廠特別升級套件（無邊框電子後視鏡、引擎室結構桿、風格側裙、尾門安全照明、座艙氣氛燈、迎賓踏板，總價值達 7 萬元）']},
                 { title: '優惠一、升級 MG 專屬配備', perks: ['HR506 專屬配備套件，總價值 <b>7 萬元</b>']},
                 { title: '優惠二、完成領牌即享', perks: ['「準26年式專屬心動購車金 3 萬元」 (已於報價表抵扣，成交價為 106.9 萬)']},
-                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 16,000 元) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.6萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
                 { title: '優惠四、輕鬆入主分期方案 (二選一)', plans: [
                     { v: '方案一、(1) 60 萬 30 期 0 利率 (元大) 或 (2) 99.9 萬 72 期 2.79% 或 (3) 88 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
                     { v: '方案二、不分期折現：折算原廠配件金 10,000 元', cash: true }
@@ -1033,10 +1818,10 @@
         'hs-20-max-no-pkg': { 
             name: 'HS 2.0T MAX 四驅 配件折現版 (HR501/506) [準26年式]', original: 109.9, heart: 8, tag: '現車超值激省 🔥', 
             discounts: [
-                { title: '【內部提示】車型規格與折抵政策說明', perks: ['【車型代號】HR501（兌換購車金）', '升級 MG 專屬配備（總價值 7 萬）兌換為 <b>購車金 5 萬</b>。']},
+                { title: '【內部提示】車型規格與折抵政策說明', perks: ['【車型代號】HR501（兌換購車金）', '升級 MG 專屬配備（總價值 7.0萬）兌換為 <b>購車金 5 萬</b>。']},
                 { title: '優惠一、升級 MG 專屬配備兌換購車金', perks: ['「升級 MG 專屬配備」兌換 <b>購車金 5 萬</b>']},
                 { title: '優惠二、完成領牌即享', perks: ['「準26年式專屬心動購車金 3 萬元」 (成交價為 101.9 萬)']},
-                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.6 萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.6萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
                 { title: '優惠四、輕鬆入主分期方案 (二選一)', plans: [
                     { v: '方案一、(1) 60 萬 30 期 0 利率 (元大) 或 (2) 99.9 萬 72 期 2.79% 或 (3) 88 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
                     { v: '方案二、不分期折現：折算原廠配件金 10,000 元', cash: true }
@@ -1046,24 +1831,24 @@
         'hs-20-classic': { 
             name: 'HS 2.0T 限量典藏版 (HR500/HR590) [準26年式]', original: 109.9, heart: 10, tag: '限量典藏心動價', 
             discounts: [
-                { title: '【內部銷售提示】對應車型代號', perks: ['細車型 <b>HR500</b>，經銷商車型 <b>HR590</b>。對外溝通為原價 <b>1,099,000 元</b>，折扣後成交價 <b>999,000 元</b>。']},
+                { title: '【內部銷售提示】對應車型代號', perks: ['細車型 <b>HR500</b>，經銷商車型 <b>HR590</b>。對外溝通為原價 <b>1,099,000 元</b>，折扣後成交價 <b>999,000 元</b>。', '<b class="text-mg-red">2.0 典藏版不提供加價升級 7.0 萬套件</b>，若客戶需要套件請改看 MAX 套件版。']},
                 { title: '優惠一、限量典藏版心動購車金', perks: ['原車價 <b>1,099,000 元</b>，本月折抵 <b>100,000 元</b>，折扣後成交價 <b>999,000 元</b>。']},
                 { title: '優惠二、輕鬆入主好康方案 (二選一)', plans: [
                     { v: '方案一、(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 97.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 88 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
-                    { v: '方案二、第五年延長保固 (價值 16,000 元)', cash: true }
+                    { v: '方案二、第五年延長保固 (價值 1.6萬)', cash: true }
                 ]}
             ]
         },
         'hs-phev-max': { 
             name: 'HS PHEV MAX (HR710/711) [準26年式]', original: 124.9, heart: 3, tag: '插電式油電強打', 
             discounts: [
-                { title: '優惠一、升級 MG 專屬配備項目 (價值 7.2 萬)', perks: ['包含：無邊框電子後視鏡、風馳尾翼、HUD 抬頭顯示器、引擎下護板、尾門安全照明燈']},
+                { title: '優惠一、升級 MG 專屬配備項目 (價值 7.2萬)', perks: ['包含：無邊框電子後視鏡、風馳尾翼、HUD 抬頭顯示器、引擎下護板、尾門安全照明燈']},
                 { title: '優惠二、完成領牌即享', perks: ['「準26年式專屬購車金 <b>3 萬</b>」 (已於報價表抵扣)']},
-                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.8 萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
+                { title: '優惠三、領牌特別回饋 (準26年式專屬)', perks: ['免費升級 <b>第五年延長保固</b>：由原 <b>4 年 / 12 萬公里</b> 升級至 <b>5 年 / 14 萬公里</b> (價值 1.8萬) <small>(計程車 / 多元計程車 / 租賃車不適用)</small>']},
                 { title: '優惠四、輕鬆入主好禮 (三選一)', plans: [
                     { v: '方案一、(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 119.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 100 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 }
                     ,{ v: '方案二、原廠配件金 10,000 元', cash: true }
-                    ,{ v: '方案三、tokuyo 美腿機 或 Panasonic 足腿按摩靴 (市價 22,800~23,800 元)', cash: true }
+                    ,{ v: '方案三、美腿機 (價值 2.28萬～2.38萬)', cash: true }
                 ]}
             ]
         },
@@ -1074,9 +1859,9 @@
                 { title: '優惠一、限量典藏版心動購車金', perks: ['原車價 <b>1,249,000 元</b>，本月折抵 <b>80,000 元</b>，折扣後成交價 <b>1,169,000 元</b>。']},
                 { title: '優惠二、輕鬆入主好康方案 (二選一)', plans: [
                     { v: '方案一、(1) 60 萬 30 期 0 利率 (元大) 或 (2) 低首付 2 萬 114.9 萬 72 期 2.79% (TAC) 或 (3) 低月付 100 萬 72 期 1.99% (元大)', cash: false, amt: 60, term: 30, rate: 0 },
-                    { v: '方案二、第五年延長保固 (價值 18,000 元)', cash: true }
+                    { v: '方案二、第五年延長保固 (價值 1.8萬)', cash: true }
                 ]},
-                { title: '優惠三、升級 MG 專屬配備 (總價值 72,000 元)', perks: ['包含：無邊框電子後視鏡暨行車紀錄器、風格側裙、風馳尾翼、專屬迎賓踏板、行李箱門檻金屬踏板、3.9 吋 HUD 抬頭顯示器、引擎室結構桿、引擎下護板、開門警示燈、尾門安全照明燈。']}
+                { title: '優惠三、免加價升級 MG 專屬配備 (價值 7.2萬)', perks: ['PHEV 典藏版不用加價，即可升級 MG 專屬配備。包含：無邊框電子後視鏡暨行車紀錄器、風格側裙、風馳尾翼、專屬迎賓踏板、行李箱門檻金屬踏板、3.9 吋 HUD 抬頭顯示器、引擎室結構桿、引擎下護板、開門警示燈、尾門安全照明燈。']}
             ]
         },
         'zs-std': { 
@@ -1752,7 +2537,7 @@
             options = [
                 ['hs-15-classic','限量典藏版 (HR390) - 85.9萬'],
                 ['hs-15-flag','旗艦版 (HR389)'],
-                ['hs-15-max','MAX 升級版 (HR38E)']
+                ['hs-15-max','MAX版 (HR38E)']
             ];
         } else if (power === '20') {
             options = [
@@ -2215,15 +3000,6 @@
     function checkPitchAuthStatus() {
         document.getElementById('pitch-auth-box').classList.add('hidden');
         document.getElementById('pitch-content-area').classList.remove('hidden');
-    }
-
-    function checkPitchPassword() {
-        checkPitchAuthStatus();
-        showToast("實戰話術庫已開放瀏覽！");
-    }
-
-    function handleAuthKeyDown(e) {
-        if (e.key === 'Enter') checkPitchPassword();
     }
 
     function filterPitches() {
